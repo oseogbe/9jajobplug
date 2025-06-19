@@ -27,7 +27,7 @@ model User {
   image          String?
   dateOfBirth    DateTime?
   hashedPassword String
-  role           UserType  @default(user)
+  role           UserType  @default(talent)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
@@ -35,8 +35,8 @@ model User {
 }
 
 enum UserType {
-  admin
-  user
+  recruiter
+  talent
 }
 
 model Token {

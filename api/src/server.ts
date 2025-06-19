@@ -42,7 +42,8 @@ const corsOptions: CorsOptions = {
             logger.warn(`CORS error: ${origin} is not allowed by CORS`)
             callback(new Error(`CORS error: ${origin} is not allowed by CORS`), false)
         }
-    }
+    },
+    credentials: true
 }
 
 app.use(cors(corsOptions))

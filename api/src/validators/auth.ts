@@ -63,7 +63,7 @@ export const registerValidationChain: ValidationChain[] = [
     body('role')
         .optional()
         .trim()
-        .isIn(['admin', 'user'])
+        .isIn(['recruiter', 'talent'])
         .withMessage('Invalid role'),
 ]
 
