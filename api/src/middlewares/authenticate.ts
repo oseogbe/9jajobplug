@@ -74,7 +74,7 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
             )
         )
 
-        logger.error('Error during authentication')
+        logger.error('Error during authentication', error)
     }
 }
 

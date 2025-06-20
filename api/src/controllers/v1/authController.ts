@@ -62,7 +62,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
                 hashedPassword,
                 phoneNo: data.phoneNo,
                 image: data.image,
-                role: data.role || 'user',
+                role: data.role || 'talent',
             }
         })
 
@@ -187,7 +187,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
 
         throw new ApiError(
             HttpStatus.UNAUTHORIZED,
-            'Please check your login details and try again!',
+            'Incorrect login credentials',
             ErrorCodes.UNAUTHORIZED
         )
     } catch (error) {
