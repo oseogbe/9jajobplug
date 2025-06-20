@@ -33,10 +33,25 @@ const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
             }
         })
 
+        if(!user) {
+            throw new ApiError(
+                HttpStatus.UNAUTHORIZED,
+                'Incorrect login credentials',
+                ErrorCodes.UNAUTHORIZED
+            )
+        }
+
+        const userDetails = {
+            id: user.id,
+            name: user.name,
+            image: user.image,
+            role: user.role
+        }
+
         sendSuccessResponse(
             res,
             {
-                user
+                user: userDetails
             },
             'User data retrieved',
             HttpStatus.OK
