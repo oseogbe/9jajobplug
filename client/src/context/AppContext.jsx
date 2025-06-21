@@ -183,6 +183,9 @@ export const AppContextProvider = (props) => {
         await fetch(`${API_BASE_URL}/auth/logout`, {
             method: 'POST',
             credentials: 'include',
+            headers: {
+                'Authorization': accessToken ? `Bearer ${accessToken}` : '',
+            },
         });
         setAuth(null, null);
     };
