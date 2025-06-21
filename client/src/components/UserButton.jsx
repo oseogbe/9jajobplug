@@ -1,11 +1,11 @@
 import React, { useContext, useRef, useState, useEffect } from 'react';
-import { AppContext } from '@/context/AppContext';
+import { AuthContext } from '@/context/AuthContext';
 import { assets } from '@/assets/assets';
 import { User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const UserButton = () => {
-  const { user, logout } = useContext(AppContext);
+  const { user, logout } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const ref = useRef();
 

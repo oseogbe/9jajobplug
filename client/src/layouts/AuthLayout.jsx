@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { AppContext } from '@/context/AppContext';
+import { AuthContext } from '@/context/AuthContext';
 
 const AuthLayout = () => {
-  const { isAuthenticated } = useContext(AppContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {

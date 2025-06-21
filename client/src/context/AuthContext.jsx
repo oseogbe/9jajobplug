@@ -1,12 +1,12 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import { API_BASE_URL } from '@/utils/api';
 
-export const AppContext = createContext();
+export const AuthContext = createContext();
 
 const USER_STORAGE_KEY = 'jobportal_user';
 const ACCESS_TOKEN_KEY = 'jobportal_access_token';
 
-export const AppContextProvider = (props) => {
+export const AuthContextProvider = (props) => {
     const [user, setUser] = useState(() => {
         const stored = localStorage.getItem(USER_STORAGE_KEY);
         return stored ? JSON.parse(stored) : null;
@@ -204,8 +204,8 @@ export const AppContextProvider = (props) => {
     };
 
     return (
-        <AppContext.Provider value={value}>
+        <AuthContext.Provider value={value}>
             {props.children}
-        </AppContext.Provider>
+        </AuthContext.Provider>
     );
 };

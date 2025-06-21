@@ -2,11 +2,11 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { assets } from '@/assets/assets';
-import { AppContext } from '@/context/AppContext';
+import { AuthContext } from '@/context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AppContext);
+  const { login } = useContext(AuthContext);
   const [form, setForm] = useState({
     email: '',
     password: '',

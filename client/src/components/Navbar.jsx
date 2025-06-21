@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import { assets } from '@/assets/assets';
-import { AppContext } from '@/context/AppContext';
+import { AuthContext } from '@/context/AuthContext';
 import UserButton from './UserButton';
 
 const Navbar = () => {
-  const { isAuthenticated, user } = useContext(AppContext);
+  const { isAuthenticated } = useContext(AuthContext);
   return (
     <div className='shadow py-4'>
       <div className='container px-4 2xl:px-20 mx-auto flex justify-between items-center'>
