@@ -44,6 +44,7 @@ const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
         const userDetails = {
             id: user.id,
             name: user.name,
+            email: user.email,
             image: user.image,
             role: user.role
         }
