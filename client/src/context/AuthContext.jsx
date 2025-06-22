@@ -34,8 +34,19 @@ export const AuthContextProvider = (props) => {
     }
   };
 
+  // Helper to check if refresh token cookie exists (not HttpOnly)
+  const hasRefreshToken = () => {
+    return document.cookie.split(';').some((cookie) => cookie.trim().startsWith('refreshToken='));
+  };
+
   // Refresh access token using refresh token cookie
   const refreshAccessToken = useCallback(async () => {
+     // Check for refresh token cookie
+    if (!hasRefreshToken()) {
+      setAuth(null, null);
+      return null;
+    }
+
     try {
       const res = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
         method: 'POST',
