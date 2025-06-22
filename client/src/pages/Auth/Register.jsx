@@ -35,13 +35,18 @@ const Register = () => {
         name: !form.name ? 'Name is required' : undefined,
         email: !form.email ? 'Email is required' : undefined,
         password: !form.password ? 'Password is required' : undefined,
-        confirmPassword: !form.confirmPassword ? 'Please confirm your password' : undefined,
+        confirmPassword: !form.confirmPassword
+          ? 'Please confirm your password'
+          : undefined,
       }));
       setIsSubmitting(false);
       return;
     }
     if (form.password !== form.confirmPassword) {
-      setErrors((prev) => ({ ...prev, confirmPassword: 'Passwords do not match' }));
+      setErrors((prev) => ({
+        ...prev,
+        confirmPassword: 'Passwords do not match',
+      }));
       setIsSubmitting(false);
       return;
     }
@@ -80,7 +85,9 @@ const Register = () => {
             <img src={assets.logo} alt="Logo" className="h-12" />
           </Link>
         </div>
-        <h3 className="text-xl font-normal text-center text-gray-500">Create an Account</h3>
+        <h3 className="text-xl font-normal text-center text-gray-500">
+          Create an Account
+        </h3>
         <div>
           <label className="block mb-1 font-medium">Name</label>
           <input
@@ -90,7 +97,9 @@ const Register = () => {
             onChange={handleChange}
             className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.name ? 'border-red-500' : ''}`}
           />
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+          )}
         </div>
         <div>
           <label className="block mb-1 font-medium">Email</label>
@@ -101,7 +110,9 @@ const Register = () => {
             onChange={handleChange}
             className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.email ? 'border-red-500' : ''}`}
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
         </div>
         <div>
           <label className="block mb-1 font-medium">Password</label>
@@ -112,7 +123,9 @@ const Register = () => {
             onChange={handleChange}
             className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.password ? 'border-red-500' : ''}`}
           />
-          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
         </div>
         <div>
           <label className="block mb-1 font-medium">Confirm Password</label>
@@ -123,7 +136,11 @@ const Register = () => {
             onChange={handleChange}
             className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.confirmPassword ? 'border-red-500' : ''}`}
           />
-          {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+          {errors.confirmPassword && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.confirmPassword}
+            </p>
+          )}
         </div>
         <button
           type="submit"
@@ -134,7 +151,9 @@ const Register = () => {
         </button>
         <p className="text-center text-sm mt-2">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">Login</Link>
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Login
+          </Link>
         </p>
       </form>
     </div>

@@ -22,9 +22,17 @@ const UserButton = () => {
 
   if (!user) return null;
 
-  const avatar = user.image
-    ? <img src={user.image} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
-    : <span className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-500"><User size={24} /></span>;
+  const avatar = user.image ? (
+    <img
+      src={user.image}
+      alt="avatar"
+      className="w-10 h-10 rounded-full object-cover"
+    />
+  ) : (
+    <span className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-500">
+      <User size={24} />
+    </span>
+  );
 
   return (
     <div className="relative" ref={ref}>
@@ -39,10 +47,17 @@ const UserButton = () => {
       {open && (
         <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg z-50 border border-gray-100">
           <div className="flex items-center gap-3 px-5 py-4 border-b">
-            {user.image
-              ? <img src={user.image} alt="avatar" className="w-12 h-12 rounded-full object-cover" />
-              : <span className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 text-gray-500"><User size={32} /></span>
-            }
+            {user.image ? (
+              <img
+                src={user.image}
+                alt="avatar"
+                className="w-12 h-12 rounded-full object-cover"
+              />
+            ) : (
+              <span className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 text-gray-500">
+                <User size={32} />
+              </span>
+            )}
             <div>
               <div className="font-semibold text-gray-800">{user.name}</div>
               <div className="text-sm text-gray-500 truncate">{user.email}</div>
@@ -54,15 +69,34 @@ const UserButton = () => {
               className="px-5 py-3 flex items-center gap-2 hover:bg-gray-50 transition text-gray-700"
               onClick={() => setOpen(false)}
             >
-              <span className="inline-block w-5"><User size={18} /></span>
+              <span className="inline-block w-5">
+                <User size={18} />
+              </span>
               Manage account
             </Link>
             <button
               className="px-5 py-3 flex items-center gap-2 hover:bg-gray-50 transition text-gray-700 text-left"
-              onClick={async () => { setOpen(false); await logout(); }}
+              onClick={async () => {
+                setOpen(false);
+                await logout();
+              }}
               type="button"
             >
-              <span className="inline-block w-5"><svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7"></path><path d="M9 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4"></path></svg></span>
+              <span className="inline-block w-5">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M17 16l4-4m0 0l-4-4m4 4H7"></path>
+                  <path d="M9 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4"></path>
+                </svg>
+              </span>
               Sign out
             </button>
           </div>

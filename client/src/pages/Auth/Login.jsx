@@ -67,7 +67,9 @@ const Login = () => {
             <img src={assets.logo} alt="Logo" className="h-12" />
           </Link>
         </div>
-        <h3 className="text-xl font-normal text-center text-gray-500">Login to Your Account</h3>
+        <h3 className="text-xl font-normal text-center text-gray-500">
+          Login to Your Account
+        </h3>
         <div>
           <label className="block mb-1 font-medium">Email</label>
           <input
@@ -77,7 +79,9 @@ const Login = () => {
             onChange={handleChange}
             className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.email ? 'border-red-500' : ''}`}
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
         </div>
         <div>
           <label className="block mb-1 font-medium">Password</label>
@@ -88,7 +92,9 @@ const Login = () => {
             onChange={handleChange}
             className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.password ? 'border-red-500' : ''}`}
           />
-          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
         </div>
         <button
           type="submit"
@@ -99,11 +105,13 @@ const Login = () => {
         </button>
         <p className="text-center text-sm mt-2">
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Register
+          </Link>
         </p>
       </form>
     </div>
   );
 };
 
-export default Login; 
+export default Login;

@@ -15,4 +15,4 @@ const AuthLayout = () => {
   return <Outlet />;
 };
 
-export default AuthLayout; 
+export default AuthLayout;
