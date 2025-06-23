@@ -10,7 +10,7 @@ const Navbar = () => {
     <div className="shadow py-4">
       <div className="container px-4 2xl:px-20 mx-auto flex justify-between items-center">
         <Link to="/">
-          <img src={assets.logo} alt="" />
+          <img src={assets.logo} alt="" className='max-sm:w-32' />
         </Link>
         <div className="flex gap-4 max-sm:text-xs">
           {!isAuthenticated ? (
