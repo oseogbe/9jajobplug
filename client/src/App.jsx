@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import RootLayout from '@/layouts/RootLayout';
@@ -8,10 +8,16 @@ import ApplyJob from '@/pages/ApplyJob';
 import Applications from '@/pages/Applications';
 import Register from '@/pages/Auth/Register';
 import Login from '@/pages/Auth/Login';
+import RecruiterLogin from './components/modals/RecruiterLogin';
+import { AppContext } from './context/AppContext';
 
 const App = () => {
+  const { showRecruiterLogin } = useContext(AppContext)
+  
   return (
-    <Routes>
+    <div>
+      {showRecruiterLogin && <RecruiterLogin />}
+      <Routes>
       <Route element={<RootLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/apply-job/:id" element={<ApplyJob />} />
@@ -22,6 +28,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
       </Route>
     </Routes>
+    </div>
   );
 };
 
