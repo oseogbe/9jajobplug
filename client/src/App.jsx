@@ -21,6 +21,8 @@ import Forbidden from '@/pages/Forbidden';
 
 import { AppContext } from '@/context/AppContext';
 
+import 'quill/dist/quill.snow.css'
+
 const App = () => {
   const { showRecruiterLogin } = useContext(AppContext);
 

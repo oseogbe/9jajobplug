@@ -82,3 +82,7 @@
 .rich-text li {
   margin-bottom: 8px;
 }
+
+input:focus-visible {
+  outline: none;
+}
