@@ -28,6 +28,8 @@ const validate = (req: Request, res: Response, next: NextFunction) => {
       ErrorCodes.VALIDATION_ERROR,
       errorMessages
     ))
+
+    return
   }
   next()
 }
