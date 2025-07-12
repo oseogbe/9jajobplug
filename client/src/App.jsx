@@ -27,10 +27,11 @@ const App = () => {
     <div>
       {showRecruiterLogin && <RecruiterLogin />}
       <Routes>
-        {/* All routes under RootLayout are protected */}
+        <Route element={<RootLayout />}>
+          <Route path="/" element={<Home />} />
+        </Route>
         <Route element={<ProtectedRoute />}>
           <Route element={<RootLayout />}>
-            <Route path="/" element={<Home />} />
             {/* Talent-only routes */}
             <Route element={<ProtectedRoute roles={['talent']} />}>
               <Route path="/apply-job/:id" element={<ApplyJob />} />
@@ -46,7 +47,7 @@ const App = () => {
             </Route>
           </Route>
         </Route>
-        {/* Auth routes (public) */}
+        {/* Auth routes */}
         <Route element={<AuthLayout />}>
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
