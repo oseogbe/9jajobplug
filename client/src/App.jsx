@@ -3,6 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 
 import RootLayout from '@/layouts/RootLayout';
 import AuthLayout from '@/layouts/AuthLayout';
+import RecruiterLayout from './layouts/RecruiterLayout';
+
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 import Home from '@/pages/Home';
 import Login from '@/pages/Auth/Login';
@@ -16,8 +19,6 @@ import ViewApplications from '@/pages/Recruiter/ViewApplications';
 import RecruiterLogin from '@/components/modals/RecruiterLogin';
 import Forbidden from '@/pages/Forbidden';
 
-import ProtectedRoute from '@/components/ProtectedRoute';
-
 import { AppContext } from '@/context/AppContext';
 
 const App = () => {
@@ -30,20 +31,20 @@ const App = () => {
         <Route element={<RootLayout />}>
           <Route path="/" element={<Home />} />
         </Route>
-        <Route element={<ProtectedRoute />}>
+        {/* Talent routes */}
+        <Route element={<ProtectedRoute roles={['talent']} />}>
           <Route element={<RootLayout />}>
-            {/* Talent-only routes */}
-            <Route element={<ProtectedRoute roles={['talent']} />}>
-              <Route path="/apply-job/:id" element={<ApplyJob />} />
-              <Route path="/applications" element={<Applications />} />
-            </Route>
-            {/* Recruiter-only routes */}
-            <Route element={<ProtectedRoute roles={['recruiter']} />}>
-              <Route path="/dashboard" element={<Dashboard />}>
-                <Route path='add-job' element={<AddJob />} />
-                <Route path='manage-jobs' element={<ManageJobs />} />
-                <Route path='view-applications' element={<ViewApplications />} />
-              </Route>
+            <Route path="/apply-job/:id" element={<ApplyJob />} />
+            <Route path="/applications" element={<Applications />} />
+          </Route>
+        </Route>
+        {/* Recruiter routes */}
+        <Route element={<ProtectedRoute roles={['recruiter']} />}>
+          <Route element={<RecruiterLayout />}>
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="add-job" element={<AddJob />} />
+              <Route path="manage-jobs" element={<ManageJobs />} />
+              <Route path="view-applications" element={<ViewApplications />} />
             </Route>
           </Route>
         </Route>

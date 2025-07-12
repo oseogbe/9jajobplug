@@ -45,7 +45,7 @@ const UserButton = () => {
         {avatar}
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg z-50 border border-gray-100">
+        <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl overflow-hidden shadow-lg z-50 border border-gray-100">
           <div className="flex items-center gap-3 px-5 py-4 border-b">
             {user.image ? (
               <img
