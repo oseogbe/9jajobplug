@@ -6,6 +6,8 @@
 /**
  * node modules
  */
+import '@/config/instrument'
+import * as Sentry from "@sentry/node";
 import express from 'express'
 import cors, { CorsOptions } from 'cors'
 import cookieParser from 'cookie-parser'
@@ -19,6 +21,7 @@ import config from '@/config'
 import limiter from '@/lib/express-rate-limit'
 import { prisma } from '@/lib/prisma'
 import { logger } from '@/lib/winston'
+import errorHandler from '@/middlewares/error-handler';
 
 /**
  * router
@@ -64,11 +67,15 @@ app.use(helmet())
 // applying rate limiting middleware to prevent excessive requests and enhance security
 app.use(limiter)
 
-
-;(async () => {
+; (async () => {
     try {
         app.use('/api/v1', v1Routes)
-        
+
+        Sentry.setupExpressErrorHandler(app)
+
+        // Register error handler after all routes and middleware
+        app.use(errorHandler)
+
         app.listen(config.PORT, () => {
             logger.info(`Server running: http://localhost:${config.PORT}`)
         })

@@ -6,15 +6,12 @@
 /**
  * custom modules
  */
-import config from '@/config'
-import { logger } from '@/lib/winston'
 import { prisma } from '@/lib/prisma'
-import { 
-    ApiError, 
-    HttpStatus, 
-    ErrorCodes, 
-    sendSuccessResponse, 
-    sendErrorResponse 
+import {
+    ApiError,
+    HttpStatus,
+    ErrorCodes,
+    sendSuccessResponse
 } from '@/utils/apiResponse'
 
 /**
@@ -24,55 +21,38 @@ import type { Request, Response } from 'express'
 
 
 const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const userId = req.userId
+    const userId = req.userId
 
-        const user = await prisma.user.findUnique({
-            where: {
-                id: userId
-            }
-        })
-
-        if(!user) {
-            throw new ApiError(
-                HttpStatus.UNAUTHORIZED,
-                'Incorrect login credentials',
-                ErrorCodes.UNAUTHORIZED
-            )
+    const user = await prisma.user.findUnique({
+        where: {
+            id: userId
         }
+    })
 
-        const userDetails = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            role: user.role
-        }
-
-        sendSuccessResponse(
-            res,
-            {
-                user: userDetails
-            },
-            'User data retrieved',
-            HttpStatus.OK
+    if (!user) {
+        throw new ApiError(
+            HttpStatus.UNAUTHORIZED,
+            'Incorrect login credentials',
+            ErrorCodes.UNAUTHORIZED
         )
-    } catch (error) {
-        if (error instanceof ApiError) {
-            sendErrorResponse(res, error)
-        } else {
-            sendErrorResponse(
-                res,
-                new ApiError(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    'Failed to login',
-                    ErrorCodes.INTERNAL_SERVER_ERROR
-                )
-            )
-        }
-
-        logger.error('Error while getting current user', error)
     }
+
+    const userDetails = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        role: user.role
+    }
+
+    sendSuccessResponse(
+        res,
+        {
+            user: userDetails
+        },
+        'User data retrieved',
+        HttpStatus.OK
+    )
 }
 
 export {

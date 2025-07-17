@@ -7,7 +7,6 @@
  * node modules
  */
 import { Request, Response, NextFunction } from 'express'
-import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 
 /**
  * custom modules
@@ -34,48 +33,11 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
 
     const [_, token] = authHeader.split(' ')
 
-    try {
-        const jwtPayload = verifyAccessToken(token) as { userId: string }
+    const jwtPayload = verifyAccessToken(token) as { userId: string }
 
-        req.userId = jwtPayload.userId
+    req.userId = jwtPayload.userId
 
-        next()
-    } catch (error) {
-        if (error instanceof TokenExpiredError) {
-            sendErrorResponse(
-                res,
-                new ApiError(
-                    HttpStatus.UNAUTHORIZED,
-                    'Access token expired, request a new one with refresh token',
-                    ErrorCodes.UNAUTHORIZED
-                )
-            )
-            return
-        }
-
-        if (error instanceof JsonWebTokenError) {
-            sendErrorResponse(
-                res,
-                new ApiError(
-                    HttpStatus.UNAUTHORIZED,
-                    'Invalid access token',
-                    ErrorCodes.UNAUTHORIZED
-                )
-            )
-            return
-        }
-        
-        sendErrorResponse(
-            res,
-            new ApiError(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                'Internal server error',
-                ErrorCodes.INTERNAL_SERVER_ERROR
-            )
-        )
-
-        logger.error('Error during authentication', error)
-    }
+    next()
 }
 
 export default authenticate

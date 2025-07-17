@@ -6,7 +6,6 @@
 /**
  * node modules
  */
-import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 import { hash, compare } from 'bcryptjs'
 
 /**
@@ -15,17 +14,16 @@ import { hash, compare } from 'bcryptjs'
 import config from '@/config'
 import { logger } from '@/lib/winston'
 import { prisma } from '@/lib/prisma'
-import { 
-    generateAccessToken, 
-    generateRefreshToken, 
-    verifyRefreshToken 
+import {
+    generateAccessToken,
+    generateRefreshToken,
+    verifyRefreshToken
 } from '@/lib/jwt'
-import { 
-    ApiError, 
-    HttpStatus, 
-    ErrorCodes, 
-    sendSuccessResponse, 
-    sendErrorResponse 
+import {
+    ApiError,
+    HttpStatus,
+    ErrorCodes,
+    sendSuccessResponse
 } from '@/utils/apiResponse'
 
 /**
@@ -35,301 +33,208 @@ import type { Request, Response } from 'express'
 
 
 const register = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const data = req.body
+    const data = req.body
 
-        // Check if user already exists
-        const existingUser = await prisma.user.findUnique({
-            where: { email: data.email }
-        })
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+        where: { email: data.email }
+    })
 
-        if (existingUser) {
-            throw new ApiError(
-                HttpStatus.CONFLICT,
-                'User with this email already exists',
-                ErrorCodes.CONFLICT
-            )
-        }
-
-        // Hash password
-        const hashedPassword = await hash(data.password, 12)
-
-        // Create user with role-specific data
-        const user = await prisma.user.create({
-            data: {
-                name: data.name,
-                email: data.email,
-                hashedPassword,
-                phoneNo: data.phoneNo,
-                image: data.image,
-                role: data.role || 'talent',
-            }
-        })
-
-        // Generate access token and refresh token for the user
-        const accessToken = generateAccessToken(user.id)
-        const refreshToken = generateRefreshToken(user.id)
-
-        // Store refresh token in db
-        await prisma.token.upsert({
-            where: {
-                userId: user.id
-            },
-            create: {
-                userId: user.id,
-                refreshToken
-            },
-            update: {
-                refreshToken
-            }
-        })
-
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: config.NODE_ENV === 'production',
-            sameSite: 'strict'
-        })
-
-        const userDetails = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            image: user.image,
-            role: user.role
-        }
-
-        sendSuccessResponse(
-            res,
-            {
-                user: userDetails,
-                accessToken
-            },
-            'User registered successfully',
-            HttpStatus.CREATED
+    if (existingUser) {
+        throw new ApiError(
+            HttpStatus.CONFLICT,
+            'User with this email already exists',
+            ErrorCodes.CONFLICT
         )
-
-        logger.info('User registered successfully', userDetails)
-    } catch (error) {
-        if (error instanceof ApiError) {
-            sendErrorResponse(res, error)
-        } else {
-            sendErrorResponse(
-                res,
-                new ApiError(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    'Failed to register user',
-                    ErrorCodes.INTERNAL_SERVER_ERROR
-                )
-            )
-        }
-
-        logger.error('Error during user registration', error)
     }
+
+    // Hash password
+    const hashedPassword = await hash(data.password, 12)
+
+    // Create user with role-specific data
+    const user = await prisma.user.create({
+        data: {
+            name: data.name,
+            email: data.email,
+            hashedPassword,
+            phoneNo: data.phoneNo,
+            image: data.image,
+            role: data.role || 'talent',
+        }
+    })
+
+    // Generate access token and refresh token for the user
+    const accessToken = generateAccessToken(user.id)
+    const refreshToken = generateRefreshToken(user.id)
+
+    // Store refresh token in db
+    await prisma.token.upsert({
+        where: {
+            userId: user.id
+        },
+        create: {
+            userId: user.id,
+            refreshToken
+        },
+        update: {
+            refreshToken
+        }
+    })
+
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: config.NODE_ENV === 'production',
+        sameSite: 'strict'
+    })
+
+    const userDetails = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        role: user.role
+    }
+
+    sendSuccessResponse(
+        res,
+        {
+            user: userDetails,
+            accessToken
+        },
+        'User registered successfully',
+        HttpStatus.CREATED
+    )
+
+    logger.info('User registered successfully', userDetails)
 }
 
 
 const login = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const data = req.body
+    const data = req.body
 
-        const user = await prisma.user.findUnique({ 
-            where: { email: data.email }
-        })
+    const user = await prisma.user.findUnique({
+        where: { email: data.email }
+    })
 
-        if (user) {
-            const match = await compare(data.password, user.hashedPassword)
+    if (user) {
+        const match = await compare(data.password, user.hashedPassword)
 
-            if (match) {
-                // Generate access token and refresh token for the user
-                const accessToken = generateAccessToken(user.id)
-                const refreshToken = generateRefreshToken(user.id)
+        if (match) {
+            // Generate access token and refresh token for the user
+            const accessToken = generateAccessToken(user.id)
+            const refreshToken = generateRefreshToken(user.id)
 
-                // Store refresh token in db
-                await prisma.token.upsert({
-                    where: {
-                        userId: user.id
-                    },
-                    create: {
-                        userId: user.id,
-                        refreshToken
-                    },
-                    update: {
-                        refreshToken
-                    }
-                })
-
-                res.cookie('refreshToken', refreshToken, {
-                    httpOnly: true,
-                    secure: config.NODE_ENV === 'production',
-                    sameSite: 'strict'
-                })
-
-                const userDetails = {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    image: user.image,
-                    role: user.role
+            // Store refresh token in db
+            await prisma.token.upsert({
+                where: {
+                    userId: user.id
+                },
+                create: {
+                    userId: user.id,
+                    refreshToken
+                },
+                update: {
+                    refreshToken
                 }
+            })
 
-                sendSuccessResponse(
-                    res,
-                    {
-                        user: userDetails,
-                        accessToken
-                    },
-                    'Login successful',
-                    HttpStatus.OK
-                )
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: config.NODE_ENV === 'production',
+                sameSite: 'strict'
+            })
 
-                logger.info('Login successful', { userDetails })
-                return
+            const userDetails = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                image: user.image,
+                role: user.role
             }
-        }
 
-        throw new ApiError(
-            HttpStatus.UNAUTHORIZED,
-            'Incorrect login credentials',
-            ErrorCodes.UNAUTHORIZED
-        )
-    } catch (error) {
-        if (error instanceof ApiError) {
-            sendErrorResponse(res, error)
-        } else {
-            sendErrorResponse(
+            sendSuccessResponse(
                 res,
-                new ApiError(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    'Failed to login',
-                    ErrorCodes.INTERNAL_SERVER_ERROR
-                )
+                {
+                    user: userDetails,
+                    accessToken
+                },
+                'Login successful',
+                HttpStatus.OK
             )
-        }
 
-        logger.error('Error during login', error)
+            logger.info('Login successful', { userDetails })
+            return
+        }
     }
+
+    throw new ApiError(
+        HttpStatus.UNAUTHORIZED,
+        'Incorrect login credentials',
+        ErrorCodes.UNAUTHORIZED
+    )
 }
 
 
 const refreshToken = async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken as string
 
-    try {
-        const tokenExists = await prisma.token.findFirst({
-            where: {
-                refreshToken
-            }
-        })
-
-        if (!tokenExists?.refreshToken) {
-            throw new ApiError(
-                HttpStatus.UNAUTHORIZED,
-                'Invalid refresh token',
-                ErrorCodes.UNAUTHORIZED
-            )
+    const tokenExists = await prisma.token.findFirst({
+        where: {
+            refreshToken
         }
+    })
 
-        const jwtPayload = verifyRefreshToken(tokenExists.refreshToken) as { userId: string }
-
-        const accessToken = generateAccessToken(jwtPayload.userId)
-
-        sendSuccessResponse(
-            res,
-            {
-                accessToken
-            },
-            'Token refreshed',
-            HttpStatus.OK
+    if (!tokenExists?.refreshToken) {
+        throw new ApiError(
+            HttpStatus.UNAUTHORIZED,
+            'Invalid refresh token',
+            ErrorCodes.UNAUTHORIZED
         )
-    } catch (error) {
-        if (error instanceof TokenExpiredError) {
-            sendErrorResponse(
-                res,
-                new ApiError(
-                    HttpStatus.UNAUTHORIZED,
-                    'Refresh token expired, please login again',
-                    ErrorCodes.UNAUTHORIZED
-                )
-            )
-            return
-        }
-
-        if (error instanceof JsonWebTokenError) {
-            sendErrorResponse(
-                res,
-                new ApiError(
-                    HttpStatus.UNAUTHORIZED,
-                    'Invalid refresh token',
-                    ErrorCodes.UNAUTHORIZED
-                )
-            )
-            return
-        }
-
-        if (error instanceof ApiError) {
-            sendErrorResponse(res, error)
-            return
-        }
-
-        sendErrorResponse(
-            res,
-            new ApiError(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                'Internal server error',
-                ErrorCodes.INTERNAL_SERVER_ERROR
-            )
-        )
-
-        logger.error('Error during refresh token', error)
     }
+
+    const jwtPayload = verifyRefreshToken(tokenExists.refreshToken) as { userId: string }
+
+    const accessToken = generateAccessToken(jwtPayload.userId)
+
+    sendSuccessResponse(
+        res,
+        {
+            accessToken
+        },
+        'Token refreshed',
+        HttpStatus.OK
+    )
 }
 
 
 const logout = async (req: Request, res: Response) => {
-    try {
-        const refreshToken = req.cookies.refreshToken as string
+    const refreshToken = req.cookies.refreshToken as string
 
-        if (refreshToken) {
-            await prisma.token.delete({
-                where: {
-                    userId: req.userId,
-                    refreshToken
-                }
-            })
-
-            logger.info('User refresh token deleted', {
+    if (refreshToken) {
+        await prisma.token.delete({
+            where: {
                 userId: req.userId,
-                token: refreshToken
-            })
-        }
-
-        res.clearCookie('refreshToken', {
-            httpOnly: true,
-            secure: config.NODE_ENV === 'production',
-            sameSite: 'strict'
+                refreshToken
+            }
         })
 
-        res.sendStatus(204)
-
-        logger.info('User logged out', {
-            userId: req.userId
+        logger.info('User refresh token deleted', {
+            userId: req.userId,
+            token: refreshToken
         })
-    } catch (error) {
-        if (error instanceof ApiError) {
-            sendErrorResponse(res, error)
-        } else {
-            sendErrorResponse(
-                res,
-                new ApiError(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    'Internal server error',
-                    ErrorCodes.INTERNAL_SERVER_ERROR
-                )
-            )
-        }
-
-        logger.error('Error during logout', error)
     }
+
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: config.NODE_ENV === 'production',
+        sameSite: 'strict'
+    })
+
+    res.sendStatus(204)
+
+    logger.info('User logged out', {
+        userId: req.userId
+    })
 }
 
 export {
