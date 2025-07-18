@@ -14,7 +14,7 @@ const Navbar = () => {
   const { setShowRecruiterLogin } = useContext(AppContext);
 
   return (
-    <div className="shadow py-4">
+    <div className="bg-white shadow py-4">
       <div className="container px-4 2xl:px-20 mx-auto flex justify-between items-center">
         <Link to="/">
           <img src={assets.logo} alt="" className="max-sm:w-32" />

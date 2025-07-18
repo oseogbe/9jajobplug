@@ -7,8 +7,8 @@ import { assets } from '@/assets/assets';
 
 const DashboardNavbar = () => {
   return (
-    <div className="shadow py-4">
-      <div className="container px-4 sm:px-6 mx-auto flex justify-between items-center">
+    <div className="border-b py-4">
+      <div className="px-4 sm:px-6 mx-auto flex justify-between items-center 2xl:w-[80%] 2xl:mx-0">
         <Link to="/">
           <img src={assets.logo} alt="" className="max-sm:w-32" />
         </Link>
