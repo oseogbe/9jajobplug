@@ -20,16 +20,19 @@ const AddJob = () => {
       quillRef.current = new Quill(editorRef.current, {
         theme: 'snow',
       });
+      // Add Tailwind classes to the Quill toolbar
+      const container = quillRef.current.root.parentElement;
+      const toolbar = container.previousSibling;
+      if (toolbar && toolbar.classList.contains('ql-toolbar')) {
+        toolbar.classList.add('!border-2', '!border-gray-300', 'rounded-t');
+      }
       // Add Tailwind classes to the Quill editor container
       quillRef.current.root.parentElement.classList.add(
-        'border-2',
-        'border-gray-300',
-        'rounded',
+        'min-h-[200px]',
+        '!border-2',
+        '!border-gray-300',
+        'rounded-b'
       );
-
-      // Set specific height for the editor
-      quillRef.current.root.style.height = '200px';
-      quillRef.current.root.style.minHeight = '200px';
     }
   }, []);
 
