@@ -95,7 +95,7 @@ const Register = () => {
             name="name"
             value={form.name}
             onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.name ? 'border-red-500' : ''}`}
+            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.name ? 'border-red-500' : ''}`}
           />
           {errors.name && (
             <p className="text-red-500 text-sm mt-1">{errors.name}</p>
@@ -108,7 +108,7 @@ const Register = () => {
             name="email"
             value={form.email}
             onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.email ? 'border-red-500' : ''}`}
+            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.email ? 'border-red-500' : ''}`}
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
@@ -121,7 +121,7 @@ const Register = () => {
             name="password"
             value={form.password}
             onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.password ? 'border-red-500' : ''}`}
+            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.password ? 'border-red-500' : ''}`}
           />
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
@@ -134,7 +134,7 @@ const Register = () => {
             name="confirmPassword"
             value={form.confirmPassword}
             onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.confirmPassword ? 'border-red-500' : ''}`}
+            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.confirmPassword ? 'border-red-500' : ''}`}
           />
           {errors.confirmPassword && (
             <p className="text-red-500 text-sm mt-1">
@@ -144,14 +144,14 @@ const Register = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
+          className="w-full bg-primary text-white py-2 rounded hover:bg-primary-dark transition disabled:opacity-50"
           disabled={isSubmitting}
         >
           {isSubmitting ? 'Registering...' : 'Register'}
         </button>
         <p className="text-center text-sm mt-2">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-primary hover:underline">
             Login
           </Link>
         </p>

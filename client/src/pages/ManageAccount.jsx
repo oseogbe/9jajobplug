@@ -49,13 +49,13 @@ const ManageAccount = () => {
           </div>
           <nav className="flex md:flex-col gap-2 md:gap-2 w-full justify-center md:justify-start mb-4 md:mb-0 max-sm:flex-row max-sm:gap-2 max-sm:justify-center">
             <button
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-center md:text-left transition font-medium w-full md:w-auto justify-center md:justify-start ${selectedTab === 'profile' ? 'bg-white shadow text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-center md:text-left transition font-medium w-full md:w-auto justify-center md:justify-start ${selectedTab === 'profile' ? 'bg-white shadow text-primary' : 'text-gray-700 hover:bg-gray-100'}`}
               onClick={() => setSelectedTab('profile')}
             >
               <User size={18} /> <span className="max-sm:hidden">Profile</span>
             </button>
             <button
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-center md:text-left transition font-medium w-full md:w-auto justify-center md:justify-start ${selectedTab === 'security' ? 'bg-white shadow text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-center md:text-left transition font-medium w-full md:w-auto justify-center md:justify-start ${selectedTab === 'security' ? 'bg-white shadow text-primary' : 'text-gray-700 hover:bg-gray-100'}`}
               onClick={() => setSelectedTab('security')}
               disabled
             >
@@ -94,7 +94,7 @@ const ManageAccount = () => {
                     />
                     <button
                       type="button"
-                      className="absolute bottom-1 right-1 bg-blue-600 text-white rounded-full p-1 shadow hover:bg-blue-700 transition"
+                      className="absolute bottom-1 right-1 bg-primary text-white rounded-full p-1 shadow hover:bg-primary-dark transition"
                       onClick={() => fileInputRef.current?.click()}
                       tabIndex={-1}
                     >
@@ -119,7 +119,7 @@ const ManageAccount = () => {
                   </div>
                 </div>
                 <button
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition w-full sm:w-auto mt-4 sm:mt-0 max-sm:w-full max-sm:mt-4"
+                  className="px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition w-full sm:w-auto mt-4 sm:mt-0 max-sm:w-full max-sm:mt-4"
                   type="button"
                   onClick={() => {}}
                   disabled
@@ -138,7 +138,7 @@ const ManageAccount = () => {
                   </span>
                 </div>
                 <button
-                  className="flex items-center gap-1 text-blue-600 hover:underline text-sm mt-1"
+                  className="flex items-center gap-1 text-primary hover:underline text-sm mt-1"
                   type="button"
                   disabled
                 >

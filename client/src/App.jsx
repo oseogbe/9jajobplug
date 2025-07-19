@@ -22,7 +22,7 @@ import Forbidden from '@/pages/Forbidden';
 
 import { AppContext } from '@/context/AppContext';
 
-import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.snow.css';
 
 const App = () => {
   const { showRecruiterLogin } = useContext(AppContext);
@@ -36,13 +36,13 @@ const App = () => {
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route element={<RootLayout />}>
+            <Route path="/apply-job/:id" element={<ApplyJob />} />
             <Route path="/account" element={<ManageAccount />} />
           </Route>
         </Route>
         {/* Talent routes */}
         <Route element={<ProtectedRoute roles={['talent']} />}>
           <Route element={<RootLayout />}>
-            <Route path="/apply-job/:id" element={<ApplyJob />} />
             <Route path="/applications" element={<Applications />} />
           </Route>
         </Route>

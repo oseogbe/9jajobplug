@@ -60,7 +60,7 @@ const JobListing = () => {
               <h3 className="font-medium text-lg mb-4">Current Search</h3>
               <div className="mb-4 text-gray-600">
                 {searchFilter.title && (
-                  <span className="inline-flex items-center gap-2.5 bg-blue-50 border border-blue-200 px-4 py-1.5 rounded">
+                  <span className="inline-flex items-center gap-2.5 bg-primary/10 border border-primary-light px-4 py-1.5 rounded">
                     {searchFilter.title}
                     <img
                       src={assets.cross_icon}
@@ -122,6 +122,7 @@ const JobListing = () => {
               <li key={i} className="flex gap-3 items-center">
                 <input
                   type="checkbox"
+                  className="scale-125"
                   onChange={() => handleLocationChange(location)}
                   checked={selectedLocations.includes(location)}
                 />
@@ -160,7 +161,7 @@ const JobListing = () => {
                 <a key={i} href="#job-list">
                   <button
                     onClick={() => setCurrentPage(i + 1)}
-                    className={`w-10 h-10 items-center justify-center border border-gray-300 rounded ${currentPage === i + 1 ? 'bg-blue-100 text-blue-500' : 'text-gray-500'}`}
+                    className={`w-10 h-10 items-center justify-center border border-gray-300 rounded ${currentPage === i + 1 ? 'bg-primary-light/30 text-primary' : 'text-gray-500'}`}
                   >
                     {i + 1}
                   </button>

@@ -109,8 +109,8 @@ const AddJob = () => {
             />
           </div>
 
-          <button className="w-28 py-3 mt-4 bg-black text-white uppercase rounded">
-            Add
+          <button className="px-4 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition mt-4">
+            Create Post
           </button>
         </form>
       </div>

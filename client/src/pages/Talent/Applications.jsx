@@ -13,7 +13,7 @@ const Applications = () => {
         {isEditResume ? (
           <>
             <label className="flex items-center" htmlFor="resumeUpload">
-              <p className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg mr-2">
+              <p className="bg-primary/15 text-primary px-4 py-2 rounded-lg mr-2">
                 Select Resume
               </p>
               <input
@@ -34,7 +34,7 @@ const Applications = () => {
           <div className="flex gap-2">
             <a
               href=""
-              className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg"
+              className="bg-primary/15 text-primary px-4 py-2 rounded-lg"
             >
               Resume
             </a>
@@ -74,7 +74,7 @@ const Applications = () => {
                   {moment(job.date).format('ll')}
                 </td>
                 <td className="py-2 px-4 border-b">
-                  <span className={`${job.status === 'Accepted' ? 'bg-green-100' : job.status === 'Rejected' ? 'bg-red-100' : 'bg-blue-100'} px-4 py-1.5 rounded`}>
+                  <span className={`${job.status === 'Accepted' ? 'bg-green-100' : job.status === 'Rejected' ? 'bg-red-100' : 'bg-primary/15'} px-4 py-1.5 rounded`}>
                   {job.status}
                   </span>
                 </td>

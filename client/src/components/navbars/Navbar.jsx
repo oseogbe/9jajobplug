@@ -30,7 +30,7 @@ const Navbar = () => {
               </button>
               <Link
                 to="/login"
-                className="bg-blue-600 text-white px-6 sm:px-9 py-2 rounded-full"
+                className="bg-primary text-white px-6 sm:px-9 py-2 rounded-full"
               >
                 Login
               </Link>

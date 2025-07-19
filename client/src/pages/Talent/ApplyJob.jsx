@@ -64,7 +64,7 @@ const ApplyJob = () => {
             </div>
           </div>
           <div className="flex flex-col justify-center text-end text-sm max-md:mx-auto max-md:text-center">
-            <button className="bg-blue-600 p-2.5 px-10 text-white rounded">
+            <button className="bg-primary p-2.5 px-10 text-white rounded">
               Apply now
             </button>
             <p className="mt-1 text-gray-600">
@@ -79,7 +79,7 @@ const ApplyJob = () => {
               className="rich-text"
               dangerouslySetInnerHTML={{ __html: JobData.description }}
             ></div>
-            <button className="bg-blue-600 p-2.5 px-10 text-white rounded mt-10">
+            <button className="bg-primary p-2.5 px-10 text-white rounded mt-10">
               Apply now
             </button>
           </div>

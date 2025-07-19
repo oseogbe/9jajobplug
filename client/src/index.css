@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary-light: #7be3c4;
+  --color-primary: #3ca381;
+  --color-primary-dark: #217a5b;
+  --color-dark: #111111;
+  --color-gray-light: #e6e6e6;
+}
+
+::selection {
+  background: var(--color-primary-light);
+  color: #fff;
+}
+
 @layer base {
   html {
     font-family: 'Outfit', sans-serif;
@@ -85,4 +98,43 @@
 
 input:focus-visible {
   outline: none;
+}
+
+input[type="checkbox"], input[type="radio"] {
+  accent-color: var(--color-primary);
+}
+
+input:focus, textarea:focus, select:focus {
+  --tw-ring-color: transparent;
+}
+
+button:focus, button:focus-visible,
+a:focus, a:focus-visible {
+  outline: none;
+}
+
+.ql-toolbar .ql-picker-label:hover,
+.ql-toolbar .ql-picker-label.ql-active,
+.ql-toolbar .ql-picker-item:hover,
+.ql-toolbar .ql-picker-item.ql-selected,
+.ql-toolbar button:hover .ql-stroke,
+.ql-toolbar button:focus .ql-stroke,
+.ql-toolbar button:hover .ql-fill,
+.ql-toolbar button:focus .ql-fill,
+.ql-toolbar button:hover .ql-even,
+.ql-toolbar button:focus .ql-even,
+.ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-toolbar .ql-picker-label:hover .ql-fill,
+.ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-toolbar .ql-picker-label:hover .ql-even,
+.ql-toolbar .ql-picker-label.ql-active .ql-even,
+.ql-toolbar .ql-picker-item:hover .ql-stroke,
+.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-toolbar .ql-picker-item:hover .ql-fill,
+.ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.ql-toolbar .ql-picker-item:hover .ql-even,
+.ql-toolbar .ql-picker-item.ql-selected .ql-even {
+  stroke: var(--color-primary) !important;
+  color: var(--color-primary) !important;
 }

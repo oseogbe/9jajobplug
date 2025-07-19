@@ -77,7 +77,7 @@ const Login = () => {
             name="email"
             value={form.email}
             onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.email ? 'border-red-500' : ''}`}
+            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.email ? 'border-red-500' : ''}`}
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
@@ -90,7 +90,7 @@ const Login = () => {
             name="password"
             value={form.password}
             onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400 ${errors.password ? 'border-red-500' : ''}`}
+            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.password ? 'border-red-500' : ''}`}
           />
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
@@ -98,14 +98,19 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
+          className="w-full bg-primary text-white py-2 rounded hover:bg-primary-dark transition disabled:opacity-50"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Logging in...' : 'Login'}
+          {isSubmitting ? (
+            // loading spinner
+            <span className="inline-block w-5 h-5 border-2 border-gray-300 border-t-2 border-t-white rounded-full animate-spin align-middle"></span>
+          ) : (
+            'Login'
+          )}
         </button>
         <p className="text-center text-sm mt-2">
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline">
+          <Link to="/register" className="text-primary hover:underline">
             Register
           </Link>
         </p>

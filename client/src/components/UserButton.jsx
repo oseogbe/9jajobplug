@@ -1,8 +1,9 @@
 import React, { useContext, useRef, useState, useEffect } from 'react';
-import { AuthContext } from '@/context/AuthContext';
-import { assets } from '@/assets/assets';
-import { User } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+import { AuthContext } from '@/context/AuthContext';
+
+import { User } from 'lucide-react';
 
 const UserButton = () => {
   const { user, logout } = useContext(AuthContext);
@@ -30,14 +31,14 @@ const UserButton = () => {
     />
   ) : (
     <span className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-500">
-      <User size={24} />
+      <User className='text-primary' size={24} />
     </span>
   );
 
   return (
     <div className="relative" ref={ref}>
       <button
-        className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 hover:border-blue-500 transition flex items-center justify-center"
+        className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 hover:border-primary transition flex items-center justify-center"
         onClick={() => setOpen((v) => !v)}
         aria-label="User menu"
         type="button"
@@ -55,7 +56,7 @@ const UserButton = () => {
               />
             ) : (
               <span className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 text-gray-500">
-                <User size={32} />
+                <User className='text-primary' size={32} />
               </span>
             )}
             <div>
