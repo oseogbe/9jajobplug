@@ -86,7 +86,7 @@ const Register = () => {
           </Link>
         </div>
         <h3 className="text-xl font-normal text-center text-gray-500">
-          Create an Account
+          create an account
         </h3>
         <div>
           <label className="block mb-1 font-medium">Name</label>

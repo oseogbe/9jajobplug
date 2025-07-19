@@ -68,7 +68,7 @@ const Login = () => {
           </Link>
         </div>
         <h3 className="text-xl font-normal text-center text-gray-500">
-          Login to Your Account
+          login to your account
         </h3>
         <div>
           <label className="block mb-1 font-medium">Email</label>
