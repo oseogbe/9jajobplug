@@ -11,8 +11,7 @@
 }
 
 ::selection {
-  background: var(--color-primary-light);
-  color: #fff;
+  background: transparent;
 }
 
 @layer base {

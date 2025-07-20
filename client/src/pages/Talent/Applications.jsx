@@ -74,7 +74,7 @@ const Applications = () => {
                   {moment(job.date).format('ll')}
                 </td>
                 <td className="py-2 px-4 border-b">
-                  <span className={`${job.status === 'Accepted' ? 'bg-green-100' : job.status === 'Rejected' ? 'bg-red-100' : 'bg-primary/15'} px-4 py-1.5 rounded`}>
+                  <span className={`${job.status === 'Accepted' ? 'bg-green-100' : job.status === 'Rejected' ? 'bg-red-100' : 'bg-yellow-100/70'} px-4 py-1.5 rounded`}>
                   {job.status}
                   </span>
                 </td>
