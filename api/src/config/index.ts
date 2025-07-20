@@ -24,6 +24,12 @@ const config = {
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET!,
     ACCESS_TOKEN_EXPIRY: process.env.ACCESS_TOKEN_EXPIRY as ms.StringValue,
     REFRESH_TOKEN_EXPIRY: process.env.REFRESH_TOKEN_EXPIRY as ms.StringValue,
+    cloudinary: {
+        cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+        apiKey: process.env.CLOUDINARY_API_KEY,
+        apiSecret: process.env.CLOUDINARY_API_SECRET,
+    },
+    storageProvider: process.env.STORAGE_PROVIDER || 'cloudinary',
 }
 
 export default config
