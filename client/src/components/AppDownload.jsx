@@ -1,5 +1,6 @@
-import { assets } from '@/assets/assets'
 import React from 'react'
+
+import { assets } from '@/assets/assets'
 
 const AppDownload = () => {
   return (
@@ -16,7 +17,7 @@ const AppDownload = () => {
                     </a>
                 </div>
             </div>
-            <img src={assets.app_main_img} alt="" className='absolute w-80 right-0 bottom-0 mr-32 max-lg:hidden' />
+            <img src={assets.app_main_img} alt="" className='absolute w-[350px] right-0 bottom-0 mr-32 max-lg:hidden' />
         </div>
     </div>
   )
