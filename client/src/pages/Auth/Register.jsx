@@ -1,8 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { assets } from '@/assets/assets';
+
 import { AuthContext } from '@/context/AuthContext';
+import Spinner from '@/components/Spinner';
+
+import { assets } from '@/assets/assets';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -56,7 +59,7 @@ const Register = () => {
       const result = await register(submitData);
       if (result.success) {
         toast.success('Logged in');
-        navigate('/');
+        navigate('/select-role'); // Navigate to role selection page
       } else if (result.error?.error?.details) {
         const fieldErrors = {};
         for (const err of result.error.error.details) {
@@ -157,7 +160,7 @@ const Register = () => {
           className="w-full bg-primary text-white py-2 rounded hover:bg-primary-dark transition disabled:opacity-50"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Registering...' : 'Register'}
+          {isSubmitting ? <Spinner /> : 'Register'}
         </button>
         <p className="text-center text-sm mt-2">
           Already have an account?{' '}

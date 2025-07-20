@@ -12,15 +12,14 @@ import { Router } from 'express'
  * controllers
  */
 import { 
-    getCurrentUser
+    getCurrentUser,
+    setUserRole
 } from '@/controllers/v1/userController'
 
 /**
  * middlewares
  */
 import authenticate from '@/middlewares/authenticate'
-import authorize from '@/middlewares/authorize'
-
 
 /**
  * routes
@@ -30,8 +29,13 @@ const router = Router()
 router.post(
     '/current', 
     authenticate, 
-    authorize(['recruiter', 'talent']), 
     getCurrentUser
+)
+
+router.patch(
+    '/role',
+    authenticate,
+    setUserRole
 )
 
 export default router

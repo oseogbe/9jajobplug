@@ -10,6 +10,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import Home from '@/pages/Home';
 import Login from '@/pages/Auth/Login';
 import Register from '@/pages/Auth/Register';
+import SelectRole from '@/pages/Auth/SelectRole';
 import ManageAccount from '@/pages/ManageAccount';
 import ApplyJob from '@/pages/Talent/ApplyJob';
 import Applications from '@/pages/Talent/Applications';
@@ -36,8 +37,9 @@ const App = () => {
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route element={<RootLayout />}>
-            <Route path="/apply-job/:id" element={<ApplyJob />} />
+            <Route path="/select-role" element={<SelectRole />} />
             <Route path="/account" element={<ManageAccount />} />
+            <Route path="/apply-job/:id" element={<ApplyJob />} />
           </Route>
         </Route>
         {/* Talent routes */}

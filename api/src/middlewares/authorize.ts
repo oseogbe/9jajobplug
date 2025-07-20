@@ -43,6 +43,18 @@ const authorize = (roles: AuthRole[]) => {
             return
         }
 
+        if (!user.role) {
+            sendErrorResponse(
+                res,
+                new ApiError(
+                    HttpStatus.FORBIDDEN,
+                    'Access denied: user role not set',
+                    ErrorCodes.FORBIDDEN
+                )
+            )
+            return
+        }
+
         if (!roles.includes(user.role)) {
             sendErrorResponse(
                 res,

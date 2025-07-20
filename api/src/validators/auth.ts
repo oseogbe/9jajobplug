@@ -59,12 +59,6 @@ export const registerValidationChain: ValidationChain[] = [
             }
             return true
         }),
-
-    body('role')
-        .optional()
-        .trim()
-        .isIn(['recruiter', 'talent'])
-        .withMessage('Invalid role'),
 ]
 
 export const loginValidatonChain: ValidationChain[] = [

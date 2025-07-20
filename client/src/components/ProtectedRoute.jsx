@@ -29,12 +29,17 @@ const ProtectedRoute = ({ roles }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // If user has no role and is not on /select-role, redirect to /select-role
+  if (user && (!user.role || user.role === null) && location.pathname !== '/select-role') {
+    return <Navigate to="/select-role" replace />;
+  }
+
+  // If roles are specified, check for authorization
   if (roles && roles.length > 0 && (!user || !roles.includes(user.role))) {
-    // Authenticated but not authorized
     return <Navigate to="/forbidden" replace />;
   }
 
-  // Authorized, render child routes
+  // Otherwise, render the child routes
   return <Outlet />;
 };
 

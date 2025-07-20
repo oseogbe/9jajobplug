@@ -21,17 +21,18 @@ datasource db {
 model User {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  email          String   @unique
+  email          String    @unique
   emailVerified  DateTime?
   phoneNo        String?
   image          String?
   dateOfBirth    DateTime?
   hashedPassword String
-  role           UserType  @default(talent)
+  role           UserType?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  token Token?
+  token      Token?
+  businesses Business[]
 }
 
 enum UserType {
@@ -44,4 +45,42 @@ model Token {
   refreshToken String?
 
   user User @relation(fields: [userId], references: [id])
+}
+
+model Business {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String?
+  logo        String?
+  description String?
+  location    String?
+  website     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  recruiterId String @db.ObjectId
+  recruiter   User   @relation(fields: [recruiterId], references: [id])
+  jobs        Job[]
+}
+
+model Job {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  category    String
+  location    String
+  level       String
+  salary      Int
+  type        JobType
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  businessId String   @db.ObjectId
+  business   Business @relation(fields: [businessId], references: [id])
+}
+
+enum JobType {
+  fulltime
+  parttime
+  contract
 }

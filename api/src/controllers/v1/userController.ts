@@ -42,7 +42,7 @@ const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
         name: user.name,
         email: user.email,
         image: user.image,
-        role: user.role
+        role: user?.role
     }
 
     sendSuccessResponse(
@@ -55,6 +55,48 @@ const getCurrentUser = async (req: Request, res: Response): Promise<void> => {
     )
 }
 
-export {
-    getCurrentUser
-}
+const setUserRole = async (req: Request, res: Response): Promise<void> => {
+    const userId = req.userId;
+
+    const { role } = req.body;
+
+    try {
+        if (!role || !['recruiter', 'talent'].includes(role)) {
+            throw new ApiError(
+                HttpStatus.BAD_REQUEST,
+                'Invalid or missing role',
+                ErrorCodes.VALIDATION_ERROR
+            );
+        }
+    
+        const user = await prisma.user.update({
+            where: { id: userId },
+            data: { role },
+        });
+    
+        const userDetails = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            role: user.role
+        };
+        
+        sendSuccessResponse(
+            res, 
+            { 
+                user: userDetails 
+            }, 
+            'Role updated', 
+            HttpStatus.OK
+        );
+    } catch (err) {
+        throw new ApiError(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            'Failed to saved user role',
+            ErrorCodes.INTERNAL_SERVER_ERROR
+        )
+    }
+};
+
+export { getCurrentUser, setUserRole };

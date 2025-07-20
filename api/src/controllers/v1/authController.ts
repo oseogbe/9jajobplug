@@ -59,7 +59,6 @@ const register = async (req: Request, res: Response): Promise<void> => {
             hashedPassword,
             phoneNo: data.phoneNo,
             image: data.image,
-            role: data.role || 'talent',
         }
     })
 
@@ -92,7 +91,6 @@ const register = async (req: Request, res: Response): Promise<void> => {
         name: user.name,
         email: user.email,
         image: user.image,
-        role: user.role
     }
 
     sendSuccessResponse(

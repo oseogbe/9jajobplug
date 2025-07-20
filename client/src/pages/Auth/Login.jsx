@@ -1,8 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { assets } from '@/assets/assets';
+
+import Spinner from '@/components/Spinner';
 import { AuthContext } from '@/context/AuthContext';
+
+import { assets } from '@/assets/assets';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -38,7 +41,15 @@ const Login = () => {
       const result = await login(form);
       if (result.success) {
         toast.success('Logged in');
-        navigate('/');
+        // Check if user has a role
+        const user = JSON.parse(localStorage.getItem('jobportal_user'));
+        if (!user?.role) {
+          navigate('/select-role');
+        } else if (user.role === 'recruiter') {
+          navigate('/dashboard');
+        } else {
+          navigate('/');
+        }
       } else if (result.error?.error?.details) {
         const fieldErrors = {};
         for (const err of result.error.error.details) {
@@ -71,7 +82,9 @@ const Login = () => {
           login to your account
         </h3>
         <div>
-          <div className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.email ? 'border-red-500' : ''}`}>
+          <div
+            className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.email ? 'border-red-500' : ''}`}
+          >
             <img src={assets.email_icon} alt="" />
             <input
               type="email"
@@ -87,7 +100,9 @@ const Login = () => {
           )}
         </div>
         <div>
-          <div className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.password ? 'border-red-500' : ''}`}>
+          <div
+            className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.password ? 'border-red-500' : ''}`}
+          >
             <img src={assets.lock} alt="" />
             <input
               type="password"
@@ -107,12 +122,7 @@ const Login = () => {
           className="w-full bg-primary text-white py-2 rounded hover:bg-primary-dark transition disabled:opacity-50"
           disabled={isSubmitting}
         >
-          {isSubmitting ? (
-            // loading spinner
-            <span className="inline-block w-5 h-5 border-2 border-gray-300 border-t-2 border-t-white rounded-full animate-spin align-middle"></span>
-          ) : (
-            'Login'
-          )}
+          {isSubmitting ? <Spinner /> : 'Login'}
         </button>
         <p className="text-center text-sm mt-2">
           Don't have an account?{' '}
