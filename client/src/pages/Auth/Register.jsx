@@ -76,7 +76,7 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <form
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md space-y-6"
+        className="bg-white p-8 pt-16 rounded-lg shadow-md w-full max-w-md space-y-6"
         onSubmit={handleSubmit}
         autoComplete="off"
       >
@@ -89,57 +89,67 @@ const Register = () => {
           create an account
         </h3>
         <div>
-          <label className="block mb-1 font-medium">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.name ? 'border-red-500' : ''}`}
-          />
+          <div className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.name ? 'border-red-500' : ''}`}>
+            <img src={assets.person_icon} alt="" />
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Name"
+              className="text-sm w-full"
+            />
+          </div>
           {errors.name && (
             <p className="text-red-500 text-sm mt-1">{errors.name}</p>
           )}
         </div>
         <div>
-          <label className="block mb-1 font-medium">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.email ? 'border-red-500' : ''}`}
-          />
+          <div className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.email ? 'border-red-500' : ''}`}>
+            <img src={assets.email_icon} alt="" />
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className="text-sm w-full"
+            />
+          </div>
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
           )}
         </div>
         <div>
-          <label className="block mb-1 font-medium">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.password ? 'border-red-500' : ''}`}
-          />
+          <div className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.password ? 'border-red-500' : ''}`}>
+            <img src={assets.lock} alt="" />
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="text-sm w-full"
+            />
+          </div>
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
           )}
         </div>
         <div>
-          <label className="block mb-1 font-medium">Confirm Password</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-primary/80 ${errors.confirmPassword ? 'border-red-500' : ''}`}
-          />
+          <div className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.confirmPassword ? 'border-red-500' : ''}`}>
+            <img src={assets.lock} alt="" />
+            <input
+              type="password"
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              placeholder="Confirm Password"
+              className="text-sm w-full"
+            />
+          </div>
           {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.confirmPassword}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
           )}
         </div>
         <button
