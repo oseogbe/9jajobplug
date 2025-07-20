@@ -35,7 +35,7 @@ const ApplyJob = () => {
         <div className="flex justify-center md:justify-between flex-wrap gap-8 px-14 py-20 mb-6 bg-sky-50 border border-sky-400 rounded-xl">
           <div className="flex flex-col md:flex-row items-center">
             <img
-              src={JobData.companyId.image}
+              src={JobData.business.image}
               alt=""
               className="h-24 bg-white rounded-lg p-4 mr-4 max-md:mb-4 border"
             />
@@ -46,7 +46,7 @@ const ApplyJob = () => {
               <div className="flex flex-row flex-wrap max-md:justify-center gap-y-2 gap-6 items-center text-gray-600 mt-2">
                 <span className="flex items-center gap-1">
                   <img src={assets.suitcase_icon} alt="" />
-                  {JobData.companyId.name}
+                  {JobData.business.name}
                 </span>
                 <span className="flex items-center gap-1">
                   <img src={assets.location_icon} alt="" />
@@ -85,12 +85,12 @@ const ApplyJob = () => {
           </div>
           {/* right section more jobs */}
           <div className='w-full lg:w-1/3 mt-8 lg:mt-0 lg:ml-8 space-y-5'>
-            <h2 className='font-medium text-lg'>More jobs from {JobData.companyId.name}</h2>
+            <h2 className='font-medium text-lg'>More jobs from {JobData.business.name}</h2>
             {jobs
               .filter(
                 (job) =>
                   job._id !== JobData._id &&
-                  job.companyId._id === JobData.companyId._id,
+                  job.business._id === JobData.business._id,
               )
               .filter((job) => true)
               .slice(0, 4)

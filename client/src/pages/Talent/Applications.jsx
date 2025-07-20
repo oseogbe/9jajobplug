@@ -51,7 +51,7 @@ const Applications = () => {
       <table className="min-w-full bg-white border rounded-lg">
         <thead>
           <tr>
-            <th className="py-3 px-4 border-b text-left">Company</th>
+            <th className="py-3 px-4 border-b text-left">Business</th>
             <th className="py-3 px-4 border-b text-left">Job Title</th>
             <th className="py-3 px-4 border-b text-left max-sm:hidden">
               Location
@@ -66,7 +66,7 @@ const Applications = () => {
               <tr>
                 <td className="py-3 px-4 flex items-center gap-2 border-b">
                   <img src={job.logo} alt="" className="w-8 h-8" />
-                  {job.company}
+                  {job.business}
                 </td>
                 <td className="py-2 px-4 border-b">{job.title}</td>
                 <td className="py-2 px-4 border-b">{job.location}</td>

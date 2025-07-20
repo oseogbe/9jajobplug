@@ -55,7 +55,7 @@ const RecruiterLogin = () => {
                 />
               </label>
               <p>
-                Upload Company <br /> logo
+                Upload Business <br /> logo
               </p>
             </div>
           </>
@@ -66,7 +66,7 @@ const RecruiterLogin = () => {
                 <img src={assets.person_icon} alt="" />
                 <input
                   type="text"
-                  placeholder="Company Name"
+                  placeholder="Business Name"
                   className="outline-none text-sm"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
