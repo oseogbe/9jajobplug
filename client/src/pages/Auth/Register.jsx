@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 
 import { AuthContext } from '@/context/AuthContext';
 import Spinner from '@/components/Spinner';
+import PasswordInput from '@/components/PasswordInput';
 
 import { assets } from '@/assets/assets';
 
@@ -124,33 +125,27 @@ const Register = () => {
           )}
         </div>
         <div>
-          <div className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.password ? 'border-red-500' : ''}`}>
-            <img src={assets.lock} alt="" />
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Password"
-              className="text-sm w-full"
-            />
-          </div>
+          <PasswordInput
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            placeholder="Password"
+            icon={assets.lock}
+            error={errors.password}
+          />
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
           )}
         </div>
         <div>
-          <div className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.confirmPassword ? 'border-red-500' : ''}`}>
-            <img src={assets.lock} alt="" />
-            <input
-              type="password"
-              name="confirmPassword"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm Password"
-              className="text-sm w-full"
-            />
-          </div>
+          <PasswordInput
+            name="confirmPassword"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm Password"
+            icon={assets.lock}
+            error={errors.confirmPassword}
+          />
           {errors.confirmPassword && (
             <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
           )}
