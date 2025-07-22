@@ -1,79 +1,52 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { AuthContext } from '@/context/AuthContext';
-import Spinner from '@/components/Spinner';
 import PasswordInput from '@/components/PasswordInput';
+import Spinner from '@/components/Spinner';
 
 import { assets } from '@/assets/assets';
 
 const Register = () => {
   const navigate = useNavigate();
   const { register } = useContext(AuthContext);
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'talent',
+  const {
+    register: rhfRegister,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      role: 'talent',
+    },
   });
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: undefined }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setErrors({});
-
-    // Basic UX: check required fields
-    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
-      setErrors((prev) => ({
-        ...prev,
-        name: !form.name ? 'Name is required' : undefined,
-        email: !form.email ? 'Email is required' : undefined,
-        password: !form.password ? 'Password is required' : undefined,
-        confirmPassword: !form.confirmPassword
-          ? 'Please confirm your password'
-          : undefined,
-      }));
-      setIsSubmitting(false);
+  const onSubmit = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      setError('confirmPassword', { message: 'Passwords do not match' });
       return;
     }
-    if (form.password !== form.confirmPassword) {
-      setErrors((prev) => ({
-        ...prev,
-        confirmPassword: 'Passwords do not match',
-      }));
-      setIsSubmitting(false);
-      return;
-    }
-
     try {
-      const { confirmPassword, ...submitData } = form;
+      const { confirmPassword, ...submitData } = data;
       const result = await register(submitData);
       if (result.success) {
         toast.success('Logged in');
-        navigate('/select-role'); // Navigate to role selection page
+        navigate('/select-role');
       } else if (result.error?.error?.details) {
-        const fieldErrors = {};
         for (const err of result.error.error.details) {
-          if (err.field) fieldErrors[err.field] = err.message;
+          if (err.field) setError(err.field, { message: err.message });
         }
-        setErrors(fieldErrors);
       } else {
         toast.error(result.error?.message || 'Registration failed');
       }
     } catch (err) {
       toast.error(err.message || 'Registration failed');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -81,7 +54,7 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <form
         className="bg-white p-8 pt-16 rounded-lg shadow-md w-full max-w-md space-y-6"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         autoComplete="off"
       >
         <div className="flex justify-center mb-4">
@@ -97,15 +70,14 @@ const Register = () => {
             <img src={assets.person_icon} alt="" />
             <input
               type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
               placeholder="Name"
               className="text-sm w-full"
+              {...rhfRegister('name', { required: 'Name is required' })}
+              required
             />
           </div>
           {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
           )}
         </div>
         <div>
@@ -113,41 +85,38 @@ const Register = () => {
             <img src={assets.email_icon} alt="" />
             <input
               type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
               placeholder="Email"
               className="text-sm w-full"
+              {...rhfRegister('email', { required: 'Email is required' })}
+              required
             />
           </div>
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
         <div>
           <PasswordInput
             name="password"
-            value={form.password}
-            onChange={handleChange}
             placeholder="Password"
             icon={assets.lock}
-            error={errors.password}
+            error={errors.password?.message}
+            {...rhfRegister('password', { required: 'Password is required' })}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
         <div>
           <PasswordInput
             name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
             placeholder="Confirm Password"
             icon={assets.lock}
-            error={errors.confirmPassword}
+            error={errors.confirmPassword?.message}
+            {...rhfRegister('confirmPassword', { required: 'Please confirm your password' })}
           />
           {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
           )}
         </div>
         <button

@@ -31,6 +31,7 @@ const PasswordInput = forwardRef(
                     placeholder={placeholder}
                     className={`text-sm w-full bg-transparent outline-none ${className}`}
                     {...props}
+                    required
                 />
                 <button
                     type="button"

@@ -1,48 +1,31 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-import Spinner from '@/components/Spinner';
 import { AuthContext } from '@/context/AuthContext';
 import PasswordInput from '@/components/PasswordInput';
+import Spinner from '@/components/Spinner';
 
 import { assets } from '@/assets/assets';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
+  const {
+    register: rhfRegister,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: { email: '', password: '' },
   });
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: undefined }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setErrors({});
-    // Basic UX: check required fields
-    if (!form.email || !form.password) {
-      setErrors((prev) => ({
-        ...prev,
-        email: !form.email ? 'Email is required' : undefined,
-        password: !form.password ? 'Password is required' : undefined,
-      }));
-      setIsSubmitting(false);
-      return;
-    }
+  const onSubmit = async (data) => {
     try {
-      const result = await login(form);
+      const result = await login(data);
       if (result.success) {
         toast.success('Logged in');
-        // Check if user has a role
         const user = JSON.parse(localStorage.getItem('jobportal_user'));
         if (!user?.role) {
           navigate('/select-role');
@@ -52,18 +35,14 @@ const Login = () => {
           navigate('/');
         }
       } else if (result.error?.error?.details) {
-        const fieldErrors = {};
         for (const err of result.error.error.details) {
-          if (err.field) fieldErrors[err.field] = err.message;
+          if (err.field) setError(err.field, { message: err.message });
         }
-        setErrors(fieldErrors);
       } else {
         toast.error(result.error?.message || 'Login failed');
       }
     } catch (err) {
       toast.error(err.message || 'Login failed');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -71,7 +50,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <form
         className="bg-white p-8 pt-16 rounded-lg shadow-md w-full max-w-md space-y-6"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         autoComplete="off"
       >
         <div className="flex justify-center mb-4">
@@ -83,34 +62,30 @@ const Login = () => {
           login to your account
         </h3>
         <div>
-          <div
-            className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.email ? 'border-red-500' : ''}`}
-          >
+          <div className={`border px-4 py-2 flex items-center gap-2 rounded mt-5 ${errors.email ? 'border-red-500' : ''}`}>
             <img src={assets.email_icon} alt="" />
             <input
               type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
               placeholder="Email"
               className="text-sm w-full"
+              {...rhfRegister('email', { required: 'Email is required' })}
+              required
             />
           </div>
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
         <div>
           <PasswordInput
             name="password"
-            value={form.password}
-            onChange={handleChange}
             placeholder="Password"
             icon={assets.lock}
-            error={errors.password}
+            error={errors.password?.message}
+            {...rhfRegister('password', { required: 'Password is required' })}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
         <button
