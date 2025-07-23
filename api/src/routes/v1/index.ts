@@ -16,6 +16,9 @@ const router = Router()
  */
 import authRoutes from "@/routes/v1/authRoute"
 import userRoutes from "@/routes/v1/userRoute"
+import businessRoutes from "@/routes/v1/businessRoute"
+import jobRoutes from "@/routes/v1/jobRoute"
+import applicationRoutes from "@/routes/v1/applicationRoute"
 
 /**
  * root route
@@ -32,5 +35,6 @@ router.get('/', (req, res) => {
 
 router.use('/auth', authRoutes)
 router.use('/users', userRoutes)
+router.use('/business', businessRoutes)
 
 export default router
