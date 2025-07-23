@@ -8,9 +8,7 @@ const AuthLayout = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (isAuthenticated && user?.role === 'recruiter') {
-      navigate('/dashboard');
-    } else if (isAuthenticated && user?.role === 'talent') {
+    if (isAuthenticated && user?.role === 'talent') {
       navigate('/');
     } else if (isAuthenticated && !user?.role && location.pathname !== '/select-role') {
       navigate('/select-role');

@@ -1,9 +1,19 @@
-import React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { assets } from '@/assets/assets';
 
 const Dashboard = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // If the current path is exactly /dashboard, redirect to /dashboard/add-job
+    if (location.pathname === '/dashboard') {
+      navigate('/dashboard/add-job', { replace: true });
+    }
+  }, [location, navigate]);
+
   return (
     <>
       {/* left sidebar */}
