@@ -49,13 +49,13 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <form
-        className="bg-white p-8 pt-16 rounded-lg shadow-md w-full max-w-md space-y-6"
+        className="bg-white p-8 pt-16 rounded-lg shadow-md w-full max-w-md space-y-6 max-sm:mx-4"
         onSubmit={handleSubmit(onSubmit)}
         autoComplete="off"
       >
         <div className="flex justify-center mb-4">
           <Link to="/">
-            <img src={assets.logo} alt="Logo" className="h-12" />
+            <img src={assets.logo} alt="Logo" className="h-10" />
           </Link>
         </div>
         <h3 className="text-xl font-normal text-center text-gray-500">

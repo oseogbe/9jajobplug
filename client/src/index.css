@@ -11,7 +11,7 @@
 }
 
 ::selection {
-  background: transparent;
+  background:  rgba(60, 163, 129, 0.1);
 }
 
 @layer base {
@@ -95,15 +95,16 @@
   margin-bottom: 8px;
 }
 
-input:focus-visible {
-  outline: none;
-}
-
 input[type="checkbox"], input[type="radio"] {
   accent-color: var(--color-primary);
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus, 
+input:focus-visible, 
+textarea:focus-visible, 
+select:focus {
+  outline: none;
   --tw-ring-color: transparent;
 }
 

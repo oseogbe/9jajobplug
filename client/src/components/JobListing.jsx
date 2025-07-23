@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { ListFilter } from 'lucide-react';
 
-import { AppContext } from '@/context/AppContext';
-import { assets, JobCategories, JobLocations } from '@/assets/assets';
 import JobCard from './JobCard';
+import { AppContext } from '@/context/AppContext';
+
+import { assets, JobCategories, JobLocations } from '@/assets/assets';
 
 const JobListing = () => {
   const { isSearched, searchFilter, setSearchFilter, jobs } =
     useContext(AppContext);
 
-  const [showFilter, setShowFilter] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 6;
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -91,9 +93,9 @@ const JobListing = () => {
 
         <button
           onClick={(e) => setShowFilter((prev) => !prev)}
-          className="px-6 py-1.5 rounded border border-gray-400 lg:hidden"
+          className="px-4 py-1.5 rounded border border-gray-400 lg:hidden"
         >
-          {showFilter ? 'Close' : 'Filters'}
+          <ListFilter className="inline-block" />
         </button>
 
         {/* category filter */}
