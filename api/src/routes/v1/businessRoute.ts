@@ -14,7 +14,8 @@ import { Router } from 'express'
 import {
     createBusiness,
     updateBusiness,
-    deleteBusiness
+    deleteBusiness,
+    getRecruiterBusinesses
 } from "@/controllers/v1/businessController"
 
 /**
@@ -35,30 +36,36 @@ import { createBusinessValidationChain, updateBusinessValidationChain } from '@/
  */
 const router = Router()
 
-router.post('/create', 
-    authenticate, 
+router.post('/create',
+    authenticate,
     authorize(['recruiter']),
     upload.single('logo'),
     processImage,
-    createBusinessValidationChain, 
-    validate, 
+    createBusinessValidationChain,
+    validate,
     createBusiness
 )
 
-router.put('/:businessId/update', 
-    authenticate, 
-    authorize(['recruiter']), 
+router.put('/:businessId/update',
+    authenticate,
+    authorize(['recruiter']),
     upload.single('logo'),
     processImage,
-    updateBusinessValidationChain, 
-    validate, 
+    updateBusinessValidationChain,
+    validate,
     updateBusiness
 )
 
-router.delete('/:businessId/delete', 
-    authenticate, 
-    authorize(['recruiter']), 
+router.delete('/:businessId/delete',
+    authenticate,
+    authorize(['recruiter']),
     deleteBusiness
+)
+
+router.get('/recruiter',
+    authenticate,
+    authorize(['recruiter']),
+    getRecruiterBusinesses
 )
 
 export default router

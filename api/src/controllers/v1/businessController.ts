@@ -165,8 +165,27 @@ const deleteBusiness = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
+const getRecruiterBusinesses = async (req: Request, res: Response): Promise<void> => {
+    const recruiterId = req.userId as string;
+    try {
+        const businesses = await prisma.business.findMany({
+            where: { recruiterId },
+            orderBy: { createdAt: 'desc' },
+        });
+        sendSuccessResponse(res, { businesses }, 'Businesses fetched successfully', HttpStatus.OK);
+    } catch (error) {
+        logger.error('Error fetching recruiter businesses', { error });
+        throw new ApiError(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            'Failed to fetch businesses',
+            ErrorCodes.INTERNAL_SERVER_ERROR
+        );
+    }
+}
+
 export {
     createBusiness,
     updateBusiness,
-    deleteBusiness
+    deleteBusiness,
+    getRecruiterBusinesses
 }
