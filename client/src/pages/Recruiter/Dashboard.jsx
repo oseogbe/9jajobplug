@@ -8,9 +8,9 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If the current path is exactly /dashboard, redirect to /dashboard/add-job
+    // If the current path is exactly /dashboard, redirect to /dashboard/manage-jobs
     if (location.pathname === '/dashboard') {
-      navigate('/dashboard/add-job', { replace: true });
+      navigate('/dashboard/manage-jobs', { replace: true });
     }
   }, [location, navigate]);
 
@@ -21,18 +21,9 @@ const Dashboard = () => {
         {/* sidebar links */}
         <ul className="flex flex-col items-start pt-5 text-gray-800">
           <NavLink
-            to={'/dashboard/add-job'}
-            className={({ isActive }) =>
-              `flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-primary/15 border-r-4 border-primary/80'}`
-            }
-          >
-            <img src={assets.add_icon} alt="" className="min-w-4" />
-            <p className='max-sm:hidden'>Add Job</p>
-          </NavLink>
-          <NavLink
             to={'/dashboard/manage-jobs'}
-            className={({ isActive }) =>
-              `flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-primary/15 border-r-4 border-primary/80'}`
+            className={() =>
+              `flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${location.pathname.startsWith('/dashboard/manage-jobs') ? 'bg-primary/15 border-r-4 border-primary/80' : ''}`
             }
           >
             <img src={assets.home_icon} alt="" className="min-w-4" />
@@ -46,6 +37,15 @@ const Dashboard = () => {
           >
             <img src={assets.person_tick_icon} alt="" className="min-w-4" />
             <p className='max-sm:hidden'>View Applications</p>
+          </NavLink>
+          <NavLink
+            to={'/add-business'}
+            className={({ isActive }) =>
+              `flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-primary/15 border-r-4 border-primary/80'}`
+            }
+          >
+            <img src={assets.add_icon} alt="" className="min-w-4" />
+            <p className='max-sm:hidden'>Create Business</p>
           </NavLink>
         </ul>
         {/* premium plan section */}

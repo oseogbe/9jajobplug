@@ -54,8 +54,8 @@ const App = () => {
         <Route element={<ProtectedRoute roles={['recruiter']} />}>
           <Route element={<RecruiterLayout />}>
             <Route path="/dashboard" element={<Dashboard />}>
-              <Route path="add-job" element={<AddJob />} />
               <Route path="manage-jobs" element={<ManageJobs />} />
+              <Route path="manage-jobs/add" element={<AddJob />} />
               <Route path="view-applications" element={<ViewApplications />} />
             </Route>
             <Route path="/add-business" element={<AddBusiness />} />
