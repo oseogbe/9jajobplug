@@ -79,6 +79,7 @@ const AddJob = () => {
                 type="text"
                 {...register('title', { required: 'Job title is required' })}
                 className="w-full px-3 py-2 border-2 border-gray-300 rounded"
+                required
               />
               {errors.title && <span className="text-xs text-red-500">{errors.title.message}</span>}
             </div>
@@ -99,7 +100,9 @@ const AddJob = () => {
             <select
               {...register('category', { required: 'Job category is required' })}
               className="w-full px-4 py-2.5 border-2 border-gray-300 rounded"
+              required
             >
+              <option value="">Select job category</option>
               {JobCategories.map((category, i) => (
                 <option key={i} value={category}>
                   {category}
@@ -115,6 +118,7 @@ const AddJob = () => {
               <select
                 {...register('workMode', { required: 'Work mode is required' })}
                 className="w-full px-4 py-2.5 border-2 border-gray-300 rounded"
+                required
               >
                 <option value="">Select work mode</option>
                 <option value="On-site">On-site</option>
