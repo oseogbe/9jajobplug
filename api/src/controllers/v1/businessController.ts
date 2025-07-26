@@ -20,6 +20,7 @@ import {
     sendSuccessResponse
 } from '@/utils/apiResponse'
 import { storageService } from '@/services/storageService';
+import { slugify } from '@/utils'
 
 /**
  * types
@@ -28,20 +29,25 @@ import type { Request, Response } from 'express'
 
 const createBusiness = async (req: Request, res: Response): Promise<void> => {
     const recruiterId = req.userId as string
-    const { name, email, description, location, website } = req.body
+    const { name, tagline, industry, organizationSize, organizationType, email, description, location, website } = req.body
+    const slug = slugify(name)
 
-    let logoUrl: string | undefined = undefined;
-    let logoPublicId: string | undefined = undefined;
+    let logoUrl: string | undefined = undefined
+    let logoPublicId: string | undefined = undefined
     if (req.file) {
-        const result = await storageService.upload(req.file.buffer, { folder: 'business_logos' });
-        logoUrl = result.url;
-        logoPublicId = result.publicId;
+        const result = await storageService.upload(req.file.buffer, { folder: 'business_logos' })
+        logoUrl = result.url
+        logoPublicId = result.publicId
     }
 
     try {
         const business = await prisma.business.create({
             data: {
                 name,
+                tagline,
+                industry,
+                organizationSize,
+                organizationType,
                 email,
                 logo: logoUrl,
                 logoPublicId,
@@ -49,6 +55,7 @@ const createBusiness = async (req: Request, res: Response): Promise<void> => {
                 location,
                 website,
                 recruiterId,
+                slug,
             },
         })
         sendSuccessResponse(res, { business }, 'Business created successfully', HttpStatus.CREATED)
@@ -66,7 +73,7 @@ const createBusiness = async (req: Request, res: Response): Promise<void> => {
 const updateBusiness = async (req: Request, res: Response): Promise<void> => {
     const recruiterId = req.userId
     const { businessId } = req.params
-    const { name, email, logo, description, location, website } = req.body
+    const { name, tagline, industry, organizationSize, organizationType, email, description, location, website } = req.body
 
     try {
         const business = await prisma.business.findUnique({ where: { id: businessId } })
@@ -83,21 +90,31 @@ const updateBusiness = async (req: Request, res: Response): Promise<void> => {
         let logoPublicId: string | undefined = undefined;
         if (req.file) {
             const result = await storageService.upload(req.file.buffer, { folder: 'business_logos' });
-            logoUrl = result.url;
-            logoPublicId = result.publicId;
+            logoUrl = result.url
+            logoPublicId = result.publicId
         }
 
+        // If name is being updated, regenerate slug
+        let slugUpdate = {};
+        if (name && name !== business.name) {
+            slugUpdate = { slug: slugify(name) }
+        }
         const updatedBusiness = await prisma.business.update({
             where: { id: businessId },
             data: {
                 name,
+                tagline,
+                industry,
+                organizationSize,
+                organizationType,
                 email,
                 logo: logoUrl,
                 logoPublicId,
                 description,
                 location,
                 website,
-                updatedAt: new Date()
+                updatedAt: new Date(),
+                ...slugUpdate
             },
         })
         sendSuccessResponse(res, { business: updatedBusiness }, 'Business updated successfully', HttpStatus.OK)

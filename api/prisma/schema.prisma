@@ -48,16 +48,21 @@ model Token {
 }
 
 model Business {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  email        String?
-  logo         String?
-  logoPublicId String? // Cloudinary public ID for the logo
-  description  String?
-  location     String?
-  website      String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  name             String
+  slug             String   @unique
+  tagline          String?
+  industry         String?
+  organizationSize String?
+  organizationType String?
+  email            String?
+  logo             String?
+  logoPublicId     String?
+  description      String?
+  location         String?
+  website          String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   recruiterId String @db.ObjectId
   recruiter   User   @relation(fields: [recruiterId], references: [id])
