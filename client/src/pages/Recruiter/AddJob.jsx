@@ -1,18 +1,28 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import Quill from 'quill';
 
 import BusinessSelect from '@/components/BusinessSelect';
+import Spinner from '@/components/Spinner';
+import { AuthContext } from '@/context/AuthContext';
+import { API_BASE_URL } from '@/utils/api';
 
 import { JobCategories, JobLocations } from '@/assets/assets';
 
 const AddJob = () => {
+  const { accessToken } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     watch,
+    trigger
   } = useForm();
 
   const watchWorkMode = watch('workMode');
@@ -46,6 +56,22 @@ const AddJob = () => {
       quillRef.current = new Quill(editorRef.current, {
         theme: 'snow',
       });
+
+      // Register the 'description' field with RHF
+      register('description', { required: 'Job description is required' });
+
+      // Sync Quill content to RHF
+      quillRef.current.on('text-change', () => {
+        const html = quillRef.current.root.innerHTML;
+        const plainText = quillRef.current.getText().trim();
+
+        // Avoid storing empty <p><br></p> as valid input
+        const isEmpty = plainText === '';
+
+        setValue('description', isEmpty ? '' : html);
+        trigger('description');
+      });
+
       // Add Tailwind classes to the Quill toolbar
       const container = quillRef.current.root.parentElement;
       const toolbar = container.previousSibling;
@@ -53,7 +79,7 @@ const AddJob = () => {
         toolbar.classList.add('!border-2', '!border-gray-300', 'rounded-t');
       }
       // Add Tailwind classes to the Quill editor container
-      quillRef.current.root.parentElement.classList.add(
+      container?.classList.add(
         '!border-2',
         '!border-gray-300',
         'rounded-b',
@@ -62,10 +88,32 @@ const AddJob = () => {
       quillRef.current.root.style.fontFamily = 'Outfit';
       quillRef.current.root.style.fontSize = '16px';
     }
-  }, []);
+  }, [editorRef, register, setValue, trigger]);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/jobs/post`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          ...data,
+          isPaid: data.isPaid === 'true', // Convert to boolean
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to post job');
+      }
+
+      toast.success('Job posted successfully!');
+      navigate('/dashboard/manage-jobs');
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -129,9 +177,9 @@ const AddJob = () => {
             </div>
 
             <div className='max-sm:mb-6'>
-              <p className="my-2 font-medium">Job Location <span className="text-red-500">*</span></p>
+              <p className="my-2 font-medium">Job Location</p>
               <select
-                {...register('location', { required: 'Job location is required' })}
+                {...register('location')}
                 className="w-full px-4 py-2.5 border-2 border-gray-300 rounded"
                 disabled={watchWorkMode === 'Remote'}
               >
@@ -154,9 +202,13 @@ const AddJob = () => {
               required
             >
               <option value="">Select job level</option>
+              <option value="Entry Level">Entry Level</option>
               <option value="Junior Level">Junior Level</option>
               <option value="Intermediate Level">Intermediate Level</option>
               <option value="Senior Level">Senior Level</option>
+              <option value="Management Level">Management Level</option>
+              <option value="Director Level">Director Level</option>
+              <option value="Executive Level">Executive Level</option>
             </select>
             {errors.level && <span className="text-xs text-red-500">{errors.level.message}</span>}
           </div>
@@ -169,10 +221,13 @@ const AddJob = () => {
               required
             >
               <option value="">Select job type</option>
-              <option value="Full-time">Full-time</option>
-              <option value="Part-time">Part-time</option>
-              <option value="Contract">Contract</option>
-              <option value="Internship">Internship</option>
+              <option value="fulltime">Full-time</option>
+              <option value="parttime">Part-time</option>
+              <option value="contract">Contract</option>
+              <option value="internship">Internship</option>
+              <option value="temporary">Temporary</option>
+              <option value="freelance">Freelance</option>
+              <option value="volunteer">Volunteer</option>
             </select>
             {errors.jobType && <span className="text-xs text-red-500">{errors.jobType.message}</span>}
           </div>
@@ -201,7 +256,7 @@ const AddJob = () => {
                   placeholder="0"
                   min={0}
                   {...register('salary', { required: 'Job salary is required' })}
-                  className="w-full"
+                  className="w-full placeholder:text-gray-900"
                   disabled={watchPaid === 'false'}
                 />
               </div>
@@ -209,13 +264,16 @@ const AddJob = () => {
             </div>
           </div>
 
-          <div className="col-span-2 max-sm:mb-4 mb-16">
+          <div className="col-span-2 max-sm:mb-4 mb-20">
             <p className="my-2 font-medium">Job Description <span className="text-red-500">*</span></p>
             <div ref={editorRef}></div>
+            {errors.description && (
+              <span className="text-xs text-red-500">{errors.description.message}</span>
+            )}
           </div>
 
-          <button type="submit" className="md:max-w-xs col-span-2 px-6 py-3 bg-primary text-white rounded font-medium hover:bg-primary-dark transition mt-4">
-            Create Post
+          <button type="submit" className="md:max-w-xs col-span-2 px-6 py-3 bg-primary text-white rounded font-medium hover:bg-primary-dark transition mt-4" disabled={isSubmitting}>
+            {isSubmitting ? <Spinner /> : 'Create Post'}
           </button>
         </form>
       </div>
