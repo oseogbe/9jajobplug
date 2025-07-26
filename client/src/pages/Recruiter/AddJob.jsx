@@ -131,6 +131,7 @@ const AddJob = () => {
                 className="w-full px-4 py-2.5 border-2 border-gray-300 rounded"
                 disabled={watchWorkMode === 'Remote'}
               >
+                <option value="">Select job location</option>
                 {JobLocations.map((location, i) => (
                   <option key={i} value={location}>
                     {location}
@@ -148,6 +149,7 @@ const AddJob = () => {
               className="w-full px-4 py-2.5 border-2 border-gray-300 rounded"
               required
             >
+              <option value="">Select job level</option>
               <option value="Junior Level">Junior Level</option>
               <option value="Intermediate Level">Intermediate Level</option>
               <option value="Senior Level">Senior Level</option>
