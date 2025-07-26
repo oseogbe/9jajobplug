@@ -78,6 +78,8 @@ model Job {
   level       String
   salary      Int
   type        JobType
+  workMode    String // e.g., Remote, On-site
+  isPaid      Boolean // Whether the job is paid
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -89,4 +91,8 @@ enum JobType {
   fulltime
   parttime
   contract
+  internship
+  freelance
+  temporary
+  volunteer
 }

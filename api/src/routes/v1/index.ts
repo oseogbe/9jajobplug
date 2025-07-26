@@ -24,7 +24,7 @@ import applicationRoutes from "@/routes/v1/applicationRoute"
  * root route
  */
 router.get('/', (req, res) => {
-    res.status(200).json({ 
+    res.status(200).json({
         message: 'API is live',
         status: 'ok',
         version: '1.0.0',
@@ -36,5 +36,6 @@ router.get('/', (req, res) => {
 router.use('/auth', authRoutes)
 router.use('/users', userRoutes)
 router.use('/business', businessRoutes)
+router.use('/jobs', jobRoutes)
 
 export default router
