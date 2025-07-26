@@ -19,7 +19,7 @@ const SelectRole = () => {
     if (user?.role === 'talent') {
       navigate('/');
     } else if (user?.role === 'recruiter') {
-      navigate('/dashboard');
+      navigate('/add-business');
     }
   }, [user, navigate]);
 
@@ -46,7 +46,7 @@ const SelectRole = () => {
       if (res.ok && data.data.user) {
         setUser(data.data.user);
         if (selectedRole === 'talent') navigate('/');
-        else if (selectedRole === 'recruiter') navigate('/dashboard');
+        else if (selectedRole === 'recruiter') navigate('/add-business'); // Redirect recruiter to add business page
       }
     } catch (err) {
       setError(err.message || 'Failed to select account type');

@@ -113,6 +113,10 @@ a:focus, a:focus-visible {
   outline: none;
 }
 
+select {
+  background: white;
+}
+
 .ql-toolbar .ql-picker-label:hover,
 .ql-toolbar .ql-picker-label.ql-active,
 .ql-toolbar .ql-picker-item:hover,

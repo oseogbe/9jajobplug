@@ -18,8 +18,10 @@ import Dashboard from '@/pages/Recruiter/Dashboard';
 import AddJob from '@/pages/Recruiter/AddJob';
 import ManageJobs from '@/pages/Recruiter/ManageJobs';
 import ViewApplications from '@/pages/Recruiter/ViewApplications';
-import RecruiterLogin from '@/components/modals/RecruiterLogin';
+import AddBusiness from '@/pages/Recruiter/AddBusiness';
 import Forbidden from '@/pages/Forbidden';
+
+import RecruiterLogin from '@/components/modals/RecruiterLogin';
 
 import { AppContext } from '@/context/AppContext';
 
@@ -56,6 +58,7 @@ const App = () => {
               <Route path="manage-jobs" element={<ManageJobs />} />
               <Route path="view-applications" element={<ViewApplications />} />
             </Route>
+            <Route path="/add-business" element={<AddBusiness />} />
           </Route>
         </Route>
         {/* Auth routes */}
