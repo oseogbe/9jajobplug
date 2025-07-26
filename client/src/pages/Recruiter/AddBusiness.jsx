@@ -119,7 +119,7 @@ const AddBusiness = () => {
                             <span className="text-xs text-gray-500 mt-2">Upload business logo</span>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Business Name *</label>
+                            <label className="block text-sm font-medium mb-1">Business Name <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 {...register('name', {
@@ -133,7 +133,7 @@ const AddBusiness = () => {
                             {errors.name && <span className="text-xs text-red-500">{errors.name.message}</span>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Tagline *</label>
+                            <label className="block text-sm font-medium mb-1">Tagline <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 {...register('tagline', {
@@ -163,7 +163,7 @@ const AddBusiness = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Industry *</label>
+                            <label className="block text-sm font-medium mb-1">Industry <span className="text-red-500">*</span></label>
                             <select
                                 {...register('industry', {
                                     required: 'Industry is required',
@@ -179,7 +179,7 @@ const AddBusiness = () => {
                             {errors.industry && <span className="text-xs text-red-500">{errors.industry.message}</span>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Organization Size *</label>
+                            <label className="block text-sm font-medium mb-1">Organization Size <span className="text-red-500">*</span></label>
                             <select
                                 {...register('organizationSize', {
                                     required: 'Organization size is required',
@@ -195,7 +195,7 @@ const AddBusiness = () => {
                             {errors.organizationSize && <span className="text-xs text-red-500">{errors.organizationSize.message}</span>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Organization Type *</label>
+                            <label className="block text-sm font-medium mb-1">Organization Type <span className="text-red-500">*</span></label>
                             <select
                                 {...register('organizationType', {
                                     required: 'Organization type is required',
@@ -211,7 +211,7 @@ const AddBusiness = () => {
                             {errors.organizationType && <span className="text-xs text-red-500">{errors.organizationType.message}</span>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">Location *</label>
+                            <label className="block text-sm font-medium mb-1">Location <span className="text-red-500">*</span></label>
                             <Controller
                                 name="location"
                                 control={control}

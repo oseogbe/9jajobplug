@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { AppContext } from '@/context/AppContext';
+// import { AppContext } from '@/context/AppContext';
 import { AuthContext } from '@/context/AuthContext';
 
 import UserButton from '@/components/UserButton';
@@ -11,7 +11,7 @@ import { assets } from '@/assets/assets';
 const Navbar = () => {
   const { isAuthenticated, user } = useContext(AuthContext);
 
-  const { setShowRecruiterLogin } = useContext(AppContext);
+  // const { setShowRecruiterLogin } = useContext(AppContext);
 
   return (
     <div className="bg-white shadow py-4">
@@ -22,12 +22,12 @@ const Navbar = () => {
         <div className="flex gap-4 max-sm:text-xs">
           {!isAuthenticated ? (
             <>
-              <button
+              {/* <button
                 onClick={() => setShowRecruiterLogin(true)}
                 className="text-gray-600"
               >
                 Post a Job
-              </button>
+              </button> */}
               <Link
                 to="/login"
                 className="bg-primary text-white px-6 sm:px-9 py-2 rounded-full"

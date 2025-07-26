@@ -27,7 +27,7 @@ const Hero = () => {
           Your Next Big Career Move Starts Right Here - Explore the Best Job
           Opportunities and Take the First Step Toward Your Future!
         </p>
-        <div className="flex items-center justify-between bg-white rounded text-gray-600 max-w-4xl pl-4 mx-4 sm:mx-auto">
+        <div className="flex items-center justify-between bg-white rounded text-gray-600 max-w-4xl pl-4 mx-4 lg:mx-auto">
           <div className="flex flex-1 items-center">
             <img className="h-4 sm:h-5" src={assets.search_icon} alt="" />
             <input
