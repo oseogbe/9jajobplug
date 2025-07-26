@@ -12,20 +12,27 @@ import { API_BASE_URL } from '@/utils/api';
 import { Industries, OrganizationSizes, OrganizationTypes } from '@/assets/assets';
 
 const AddBusiness = () => {
-    const navigate = useNavigate();
-    const { accessToken } = useContext(AuthContext);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
     const [logoFile, setLogoFile] = useState(null);
     const [logoPreview, setLogoPreview] = useState(null);
-    const fileInputRef = useRef();
-    const { control, register, handleSubmit, formState: { errors } } = useForm();
     const [formPreview, setFormPreview] = useState({
         name: '',
         tagline: '',
         industry: '',
         logo: null,
     });
+
+    const fileInputRef = useRef();
+
+    const navigate = useNavigate();
+
+    const { accessToken } = useContext(AuthContext);
+
+    const {
+        control,
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting }
+    } = useForm();
 
     const handleLogoChange = (e) => {
         const file = e.target.files[0];
@@ -44,8 +51,6 @@ const AddBusiness = () => {
     };
 
     const onSubmit = async (data) => {
-        setLoading(true);
-        setError(null);
         try {
             const formData = new FormData();
             Object.entries(data).forEach(([key, value]) => {
@@ -65,12 +70,10 @@ const AddBusiness = () => {
                 toast.success('Business created');
                 navigate('/dashboard');
             } else {
-                setError(result.message || 'Failed to create business');
+                toast.error(result.message || 'Failed to create business');
             }
         } catch (err) {
-            setError(err.message || 'Failed to create business');
-        } finally {
-            setLoading(false);
+            toast.error(err.message || 'Failed to create business');
         }
     };
 
@@ -85,7 +88,6 @@ const AddBusiness = () => {
                 <div className="flex-1 bg-white rounded-2xl shadow p-8 mx-auto max-w-xl min-w-[320px]">
                     <h2 className="text-2xl font-semibold mb-2 text-gray-900 text-center">Add Your Business</h2>
                     <p className="text-gray-500 text-center mb-6 text-sm">Create a business profile to start posting jobs. You can skip this step and add a business later.</p>
-                    {error && <div className="text-red-500 text-center mb-4">{error}</div>}
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         {/* Logo upload with preview */}
                         <div className="flex flex-col items-center mb-2">
@@ -227,10 +229,10 @@ const AddBusiness = () => {
                             <input type="text" {...register('website')} className="w-full max-w-lg px-3 py-2 border-2 border-gray-300 rounded" />
                         </div>
                         <div className="flex gap-4 mt-6 flex-col sm:flex-row">
-                            <button type="submit" className="bg-primary text-white px-6 py-2 rounded font-semibold flex-1" disabled={loading}>
-                                {loading ? <Spinner /> : 'Create Business'}
+                            <button type="submit" className="bg-primary text-white px-6 py-2 rounded font-semibold flex-1" disabled={isSubmitting}>
+                                {isSubmitting ? <Spinner /> : 'Create Business'}
                             </button>
-                            <button type="button" className="bg-gray-200 text-gray-700 px-6 py-2 rounded font-semibold flex-1" onClick={handleSkip} disabled={loading}>
+                            <button type="button" className="bg-gray-200 text-gray-700 px-6 py-2 rounded font-semibold flex-1" onClick={handleSkip} disabled={isSubmitting}>
                                 Skip for now
                             </button>
                         </div>
