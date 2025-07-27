@@ -81,10 +81,55 @@ const deleteJob = async (req: Request, res: Response): Promise<void> => {
 
 }
 
+const getRecruiterJobs = async (req: Request, res: Response): Promise<void> => {
+    const recruiterId = req.userId as string;
+    const { page = 1, limit = 10 } = req.query;
+
+    const skip = (Number(page) - 1) * Number(limit);
+
+    try {
+        const jobs = await prisma.job.findMany({
+            where: {
+                business: {
+                    recruiterId,
+                },
+            },
+            skip,
+            take: Number(limit),
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        const totalJobs = await prisma.job.count({
+            where: {
+                business: {
+                    recruiterId,
+                },
+            },
+        });
+
+        sendSuccessResponse(res, {
+            jobs,
+            total: totalJobs,
+            page: Number(page),
+            limit: Number(limit),
+        }, 'Jobs fetched successfully', HttpStatus.OK);
+    } catch (error) {
+        logger.error('Error fetching recruiter jobs', { error });
+        throw new ApiError(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            'Failed to fetch jobs',
+            ErrorCodes.INTERNAL_SERVER_ERROR
+        );
+    }
+};
+
 export {
     postJob,
     getJobApplicants,
     getPostedJobs,
     changeJobVisibility,
-    deleteJob
+    deleteJob,
+    getRecruiterJobs,
 }

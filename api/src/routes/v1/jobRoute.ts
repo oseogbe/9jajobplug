@@ -17,6 +17,7 @@ import {
     getJobApplicants,
     changeJobVisibility,
     deleteJob,
+    getRecruiterJobs
 } from "@/controllers/v1/jobController"
 
 /**
@@ -65,5 +66,11 @@ router.post('/:jobId/delete-job',
     authorize(['recruiter']),
     deleteJob
 )
+router.get(
+    '/recruiter-jobs',
+    authenticate,
+    authorize(['recruiter']),
+    getRecruiterJobs
+);
 
 export default router

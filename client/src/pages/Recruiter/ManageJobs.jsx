@@ -1,12 +1,43 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import moment from 'moment';
-
-import { manageJobsData } from '@/assets/assets';
+import { API_BASE_URL } from '@/utils/api';
+import { AuthContext } from '@/context/AuthContext';
 
 const ManageJobs = () => {
+  const [jobs, setJobs] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalJobs, setTotalJobs] = useState(0);
+  const { accessToken } = useContext(AuthContext);
   const navigate = useNavigate();
+  const jobsPerPage = 10;
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/jobs/recruiter-jobs?page=${currentPage}&limit=${jobsPerPage}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error('Failed to fetch jobs');
+        }
+        const data = await response.json();
+        setJobs(data.data.jobs);
+        setTotalJobs(data.data.total);
+      } catch (error) {
+        console.error('Error fetching jobs:', error);
+      }
+    };
+
+    fetchJobs();
+  }, [currentPage, accessToken]);
+
+  const totalPages = Math.ceil(totalJobs / jobsPerPage);
 
   return (
     <div className="container">
@@ -15,35 +46,50 @@ const ManageJobs = () => {
           <tr>
             <th className="py-2 px-4 border-b text-left max-sm:hidden">#</th>
             <th className="py-2 px-4 border-b text-left">Job Title</th>
+            <th className="py-2 px-4 border-b text-left">Level</th>
             <th className="py-2 px-4 border-b text-left max-sm:hidden">Date</th>
-            <th className="py-2 px-4 border-b text-left max-sm:hidden">
-              Location
-            </th>
+            <th className="py-2 px-4 border-b text-left max-sm:hidden">Location</th>
             <th className="py-2 px-4 border-b text-center">Applicants</th>
             <th className="py-2 px-4 border-b text-left">Visible</th>
           </tr>
         </thead>
         <tbody>
-          {manageJobsData.map((job, i) => (
-            <tr key={i} className="text-gray-700">
+          {jobs.map((job, i) => (
+            <tr key={job.id} className="text-gray-700">
               <td className="py-2 px-4 border-b max-sm:hidden">{i + 1}</td>
               <td className="py-2 px-4 border-b">{job.title}</td>
+              <td className="py-2 px-4 border-b">{job.level}</td>
               <td className="py-2 px-4 border-b max-sm:hidden">
-                {moment(job.date).format('ll')}
+                {moment(job.createdAt).format('ll')}
               </td>
-              <td className="py-2 px-4 border-b max-sm:hidden">
-                {job.location}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {job.applicants}
-              </td>
+              <td className="py-2 px-4 border-b max-sm:hidden">{job.location}</td>
+              <td className="py-2 px-4 border-b text-center">{job.applicants || 0}</td>
               <td className="py-2 px-4 border-b">
-                <input type="checkbox" className="scale-125 ml-4" />
+                <input type="checkbox" className="scale-125 ml-4" defaultChecked={job.isVisible} />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <div className="mt-4 flex justify-between items-center">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 transition disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-400 transition disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
       <div className="mt-4 flex justify-end">
         <button
           onClick={() => navigate('/dashboard/manage-jobs/add')}
