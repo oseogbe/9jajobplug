@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { API_BASE_URL } from '@/utils/api';
 import { AuthContext } from '@/context/AuthContext';
+import { Briefcase } from 'lucide-react';
 
 const ManageJobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -38,6 +39,22 @@ const ManageJobs = () => {
   }, [currentPage, accessToken]);
 
   const totalPages = Math.ceil(totalJobs / jobsPerPage);
+
+  if (jobs.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center">
+        <Briefcase className="w-16 h-16 text-gray-400 mb-6" />
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">No Jobs Found</h2>
+        <p className="text-gray-500 mb-6">You haven't created any jobs yet. Start by adding a new job to attract talents.</p>
+        <button
+          onClick={() => navigate('/dashboard/manage-jobs/add')}
+          className="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition"
+        >
+          Add New Job
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
