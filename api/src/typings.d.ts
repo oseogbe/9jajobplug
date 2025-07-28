@@ -4,12 +4,11 @@
  */
 
 export interface UploadResult {
-    url: string;
-    publicId?: string;
-  }
-  
-  export interface IStorageProvider {
-    upload(buffer: Buffer, options?: { folder?: string; filename?: string }): Promise<UploadResult>;
-    delete(publicId: string): Promise<void>;
-  }
-  
+  url: string;
+  publicId?: string;
+}
+
+export interface IStorageProvider {
+  upload(buffer: Buffer, options?: { folder?: string; filename?: string }): Promise<UploadResult>;
+  delete(publicId: string): Promise<void>;
+}
