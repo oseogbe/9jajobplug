@@ -24,7 +24,7 @@ import {
 import validate from '@/middlewares/validate'
 import authenticate from '@/middlewares/authenticate'
 import authorize from '@/middlewares/authorize'
-import upload, { processImage } from '@/middlewares/uploadImage'
+import { processImage, uploadImage } from '@/middlewares/uploadFile'
 
 /**
  * validation chains
@@ -39,7 +39,7 @@ const router = Router()
 router.post('/create',
     authenticate,
     authorize(['recruiter']),
-    upload.single('logo'),
+    uploadImage.single('logo'),
     processImage,
     createBusinessValidationChain,
     validate,
@@ -49,7 +49,7 @@ router.post('/create',
 router.put('/:businessId/update',
     authenticate,
     authorize(['recruiter']),
-    upload.single('logo'),
+    uploadImage.single('logo'),
     processImage,
     updateBusinessValidationChain,
     validate,
