@@ -1,34 +1,100 @@
-import { assets, jobsApplied } from '@/assets/assets';
+import React, { useState, useContext } from 'react';
 import moment from 'moment';
-import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+
+import { API_BASE_URL } from '@/utils/api';
+import { AuthContext } from '@/context/AuthContext';
+import Spinner from '@/components/Spinner';
+
+import { assets, jobsApplied } from '@/assets/assets';
 
 const Applications = () => {
-  const [isEditResume, setIsEditResume] = useState(false);
   const [resume, setResume] = useState(null);
-  
+  const [isEditResume, setIsEditResume] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const { accessToken } = useContext(AuthContext);
+
+  const handleUploadResume = async () => {
+    if (!resume) {
+      toast.error('Please select a resume to upload.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('resume', resume);
+
+    setIsUploading(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/talents/resume/upload`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload resume');
+      }
+
+      toast.success('Resume uploaded successfully!');
+      clearFileSelected();
+    } catch (error) {
+      toast.error(
+        error.message || 'An error occurred while uploading the resume.',
+      );
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const clearFileSelected = () => {
+    setIsEditResume(false);
+    setResume(null);
+  }
+
   return (
     <div className="container px-4 min-h-[65vh] 2xl:px-20 mx-auto my-10">
       <h2 className="text-xl font-semibold">Your Resume</h2>
-      <div className="flex gap-2 mb-6 mt-6">
+      <div className='my-6'>
         {isEditResume ? (
           <>
-            <label className="flex items-center" htmlFor="resumeUpload">
-              <p className="bg-primary/15 text-primary px-4 py-2 rounded-lg mr-2">
-                Select Resume
-              </p>
-              <input
-                id="resumeUpload"
-                type="file"
-                accept="application/pdf"
-                onChange={(e) => setResume(e.target.files[0])}
-                hidden
-              />
-              <img src={assets.profile_upload_icon} alt="" />
-            </label>
-            <button
-              onClick={() => setIsEditResume(false)}
-              className="bg-green-100 border border-green-400 rounded-lg px-4 py-2"
-            >Save</button>
+            <div className="flex gap-2">
+              <label className="flex items-center" htmlFor="resumeUpload">
+                <p className="bg-primary/15 text-primary px-4 py-2 rounded-lg mr-2 cursor-pointer">
+                  Select Resume
+                </p>
+                <input
+                  id="resumeUpload"
+                  type="file"
+                  accept="application/pdf"
+                  onChange={(e) => setResume(e.target.files[0])}
+                  hidden
+                />
+                <img src={assets.profile_upload_icon} alt="" />
+              </label>
+              <button
+                onClick={handleUploadResume}
+                className="bg-green-100 border border-green-400 rounded-lg px-4 py-2"
+                disabled={isUploading}
+              >
+                {isUploading ? <Spinner /> : 'Save'}
+              </button>
+              <button
+                onClick={clearFileSelected}
+                className="bg-gray-100 border border-gray-400 rounded-lg px-4 py-2"
+                disabled={isUploading}
+              >
+                Cancel
+              </button>
+            </div>
+            <div>
+              {resume && (
+                <p className="block text-sm text-gray-600 mt-2">
+                  {resume.name}
+                </p>
+              )}
+            </div>
           </>
         ) : (
           <div className="flex gap-2">
@@ -61,26 +127,31 @@ const Applications = () => {
           </tr>
         </thead>
         <tbody>
-          {jobsApplied.map((job, i) =>
-            true ? (
-              <tr>
-                <td className="py-3 px-4 flex items-center gap-2 border-b">
-                  <img src={job.logo} alt="" className="w-8 h-8" />
-                  {job.business}
-                </td>
-                <td className="py-2 px-4 border-b">{job.title}</td>
-                <td className="py-2 px-4 border-b">{job.location}</td>
-                <td className="py-2 px-4 border-b">
-                  {moment(job.date).format('ll')}
-                </td>
-                <td className="py-2 px-4 border-b">
-                  <span className={`${job.status === 'Accepted' ? 'bg-green-100' : job.status === 'Rejected' ? 'bg-red-100' : 'bg-yellow-100/70'} px-4 py-1.5 rounded`}>
+          {jobsApplied.map((job, i) => (
+            <tr key={i}>
+              <td className="py-3 px-4 flex items-center gap-2 border-b">
+                <img src={job.logo} alt="" className="w-8 h-8" />
+                {job.business}
+              </td>
+              <td className="py-2 px-4 border-b">{job.title}</td>
+              <td className="py-2 px-4 border-b">{job.location}</td>
+              <td className="py-2 px-4 border-b">
+                {moment(job.date).format('ll')}
+              </td>
+              <td className="py-2 px-4 border-b">
+                <span
+                  className={`${job.status === 'Accepted'
+                    ? 'bg-green-100'
+                    : job.status === 'Rejected'
+                      ? 'bg-red-100'
+                      : 'bg-yellow-100/70'
+                    } px-4 py-1.5 rounded`}
+                >
                   {job.status}
-                  </span>
-                </td>
-              </tr>
-            ) : null,
-          )}
+                </span>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
