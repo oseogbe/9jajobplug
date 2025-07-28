@@ -48,7 +48,7 @@ const errorHandler: ErrorRequestHandler = (err: any, req: Request, res: Response
     logger.error('Unhandled error caught:', err)
     const apiError = new ApiError(
         HttpStatus.INTERNAL_SERVER_ERROR,
-        err.message || 'Internal server error',
+        'An error occurred! Please try again later.',
         ErrorCodes.INTERNAL_SERVER_ERROR
     )
     sendErrorResponse(res, apiError)

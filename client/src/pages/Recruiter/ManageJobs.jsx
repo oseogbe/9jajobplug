@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
-import { API_BASE_URL } from '@/utils/api';
-import { AuthContext } from '@/context/AuthContext';
 import { Briefcase } from 'lucide-react';
+import moment from 'moment';
+import toast from 'react-hot-toast';
+
+import { AuthContext } from '@/context/AuthContext';
+import { API_BASE_URL } from '@/utils/api';
 
 const ManageJobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -31,7 +33,9 @@ const ManageJobs = () => {
         setJobs(data.data.jobs);
         setTotalJobs(data.data.total);
       } catch (error) {
-        console.error('Error fetching jobs:', error);
+        setJobs([]);
+        setTotalJobs(0);
+        toast.error(error.message || 'Error fetching jobs. Try again later.');
       }
     };
 
