@@ -41,7 +41,7 @@ const App = () => {
           <Route element={<RootLayout />}>
             <Route path="/select-role" element={<SelectRole />} />
             <Route path="/account" element={<ManageAccount />} />
-            <Route path="/apply-job/:id" element={<ApplyJob />} />
+            <Route path="/apply-job/:slug" element={<ApplyJob />} />
           </Route>
         </Route>
         {/* Talent routes */}

@@ -72,6 +72,7 @@ model Business {
 model Job {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
+  slug        String   @unique
   description String
   category    String
   location    String

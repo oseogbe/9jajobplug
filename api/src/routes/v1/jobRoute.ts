@@ -13,11 +13,13 @@ import { Router } from 'express'
  */
 import {
     postJob,
-    getPostedJobs,
     getJobApplicants,
     changeJobVisibility,
     deleteJob,
-    getRecruiterJobs
+    getRecruiterJobs,
+    getAllJobs,
+    getJobBySlug,
+    getRelatedJobs
 } from "@/controllers/v1/jobController"
 
 /**
@@ -45,32 +47,39 @@ router.post(
     validate,
     postJob
 )
+
 router.get(
-    '/list',
-    authenticate,
-    authorize(['recruiter']),
-    getPostedJobs
+    '/all',
+    getAllJobs
 )
-router.get('/:jobId/applicants',
-    authenticate,
-    authorize(['recruiter']),
-    getJobApplicants
-)
-router.post('/:jobId/change-visibility',
-    authenticate,
-    authorize(['recruiter']),
-    changeJobVisibility
-)
-router.post('/:jobId/delete-job',
-    authenticate,
-    authorize(['recruiter']),
-    deleteJob
-)
+
 router.get(
     '/recruiter-jobs',
     authenticate,
     authorize(['recruiter']),
     getRecruiterJobs
-);
+)
+
+router.get('/single/:slug', getJobBySlug)
+
+router.get('/related', getRelatedJobs)
+
+router.get('/:jobId/applicants',
+    authenticate,
+    authorize(['recruiter']),
+    getJobApplicants
+)
+
+router.post('/:jobId/change-visibility',
+    authenticate,
+    authorize(['recruiter']),
+    changeJobVisibility
+)
+
+router.post('/:jobId/delete-job',
+    authenticate,
+    authorize(['recruiter']),
+    deleteJob
+)
 
 export default router

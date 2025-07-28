@@ -1,21 +1,44 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ListFilter } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 import JobCard from './JobCard';
 import { AppContext } from '@/context/AppContext';
+import { API_BASE_URL } from '@/utils/api';
 
 import { assets, JobCategories, JobLocations } from '@/assets/assets';
 
 const JobListing = () => {
-  const { isSearched, searchFilter, setSearchFilter, jobs } =
+
+  const { isSearched, searchFilter, setSearchFilter } =
     useContext(AppContext);
 
   const [showFilter, setShowFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 6;
+  const jobsPerPage = 12;
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState(jobs);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/jobs/all?page=${currentPage}&limit=${jobsPerPage}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch jobs');
+        }
+        const data = await response.json();
+        setJobs(data.data.jobs);
+      } catch (error) {
+        setJobs([]);
+        setFilteredJobs([]);
+        toast.error(error.message || 'Error fetching jobs. Try again later.');
+      }
+    };
+
+    fetchJobs();
+  }, [currentPage]);
 
   useEffect(() => {
     const matchesCategory = job => selectedCategories.length === 0 || selectedCategories.includes(job.category)
@@ -68,7 +91,7 @@ const JobListing = () => {
                       src={assets.cross_icon}
                       className="cursor-pointer"
                       alt=""
-                      onClick={(e) =>
+                      onClick={() =>
                         setSearchFilter((prev) => ({ ...prev, title: '' }))
                       }
                     />
@@ -81,7 +104,7 @@ const JobListing = () => {
                       src={assets.cross_icon}
                       className="cursor-pointer"
                       alt=""
-                      onClick={(e) =>
+                      onClick={() =>
                         setSearchFilter((prev) => ({ ...prev, location: '' }))
                       }
                     />
@@ -92,7 +115,7 @@ const JobListing = () => {
           )}
 
         <button
-          onClick={(e) => setShowFilter((prev) => !prev)}
+          onClick={() => setShowFilter((prev) => !prev)}
           className="px-4 py-1.5 rounded border border-gray-400 lg:hidden"
         >
           <ListFilter className="inline-block" />
