@@ -77,6 +77,17 @@ const getAllJobs = async (req: Request, res: Response): Promise<void> => {
         const jobs = await prisma.job.findMany({
             skip,
             take: Number(limit),
+            include: {
+                business: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                        logo: true,
+                        website: true,
+                    },
+                },
+            },
             orderBy: {
                 createdAt: 'desc',
             },
