@@ -20,6 +20,7 @@ import {
     sendSuccessResponse
 } from '@/utils/apiResponse'
 import { storageService } from '@/services/storageService';
+import { slugify } from '@/utils';
 
 /**
  * types
@@ -87,7 +88,14 @@ const uploadResume = async (req: Request, res: Response): Promise<void> => {
             data: { isDefault: false },
         });
 
-        const result = await storageService.upload(req.file.buffer, { folder: 'resumes' });
+        // Generate a unique filename by appending a unique string to the original filename
+        const originalName = req.file.originalname.replace(/\.[^/.]+$/, ''); // Remove file extension
+        const uniqueFilename = slugify(originalName);
+
+        const result = await storageService.uploadFile(req.file.buffer, {
+            folder: 'resumes',
+            filename: uniqueFilename,
+        });
 
         const resume = await prisma.resume.create({
             data: {
@@ -121,13 +129,13 @@ const deleteResume = async (req: Request, res: Response): Promise<void> => {
         }
 
         if (resume.filePublicId) {
-            await storageService.delete(resume.filePublicId);
+            await storageService.delete(resume.filePublicId, 'raw');
         }
 
         // Delete logo from storage if it exists
         if (resume.filePublicId) {
             try {
-                await storageService.delete(resume.filePublicId);
+                await storageService.delete(resume.filePublicId, 'raw');
             } catch (err) {
                 logger.warn('Failed to delete resume file from storage', { error: err, resumeId });
             }

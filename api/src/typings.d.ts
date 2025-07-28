@@ -9,6 +9,7 @@ export interface UploadResult {
 }
 
 export interface IStorageProvider {
-  upload(buffer: Buffer, options?: { folder?: string; filename?: string }): Promise<UploadResult>;
-  delete(publicId: string): Promise<void>;
+  uploadImage(buffer: Buffer, options?: { folder?: string; filename?: string }): Promise<UploadResult>;
+  uploadFile(buffer: Buffer, options?: { folder?: string; filename?: string }): Promise<UploadResult>;
+  delete(publicId: string, resourceType: 'image' | 'raw' | 'auto' = 'image'): Promise<void>;
 }

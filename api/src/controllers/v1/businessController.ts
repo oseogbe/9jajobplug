@@ -35,7 +35,7 @@ const createBusiness = async (req: Request, res: Response): Promise<void> => {
     let logoUrl: string | undefined = undefined
     let logoPublicId: string | undefined = undefined
     if (req.file) {
-        const result = await storageService.upload(req.file.buffer, { folder: 'business_logos' })
+        const result = await storageService.uploadImage(req.file.buffer, { folder: 'business_logos' })
         logoUrl = result.url
         logoPublicId = result.publicId
     }
@@ -89,7 +89,7 @@ const updateBusiness = async (req: Request, res: Response): Promise<void> => {
         let logoUrl: string | undefined = undefined;
         let logoPublicId: string | undefined = undefined;
         if (req.file) {
-            const result = await storageService.upload(req.file.buffer, { folder: 'business_logos' });
+            const result = await storageService.uploadImage(req.file.buffer, { folder: 'business_logos' });
             logoUrl = result.url
             logoPublicId = result.publicId
         }
