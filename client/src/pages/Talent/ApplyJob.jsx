@@ -15,6 +15,7 @@ const ApplyJob = () => {
 
   const [JobData, setJobData] = useState(null);
   const [relatedJobs, setRelatedJobs] = useState([]);
+  const [isLoadingRelatedJobs, setIsLoadingRelatedJobs] = useState(true);
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -27,6 +28,7 @@ const ApplyJob = () => {
         setJobData(data.data.job);
 
         // Fetch related jobs from the new endpoint
+        setIsLoadingRelatedJobs(true);
         const related = await fetch(
           `${API_BASE_URL}/jobs/related?businessId=${data.data.job.business.id}&excludeSlug=${slug}`,
         );
@@ -40,6 +42,8 @@ const ApplyJob = () => {
         toast.error(error.message || 'An error occurred. Try again later.');
         setJobData(null);
         setRelatedJobs([]);
+      } finally {
+        setIsLoadingRelatedJobs(false);
       }
     };
 
@@ -105,9 +109,13 @@ const ApplyJob = () => {
             <h2 className="font-medium text-lg">
               More jobs from {JobData.business.name}
             </h2>
-            {relatedJobs.slice(0, 4).map((job, i) => (
-              <JobCard key={i} job={job} />
-            ))}
+            {isLoadingRelatedJobs
+              ? Array.from({ length: 4 }).map((_, i) => (
+                <JobCard key={i} isLoading={true} />
+              ))
+              : relatedJobs.slice(0, 4).map((job, i) => (
+                <JobCard key={i} job={job} />
+              ))}
           </div>
         </div>
       </div>

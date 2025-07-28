@@ -9,9 +9,7 @@ import { API_BASE_URL } from '@/utils/api';
 import { assets, JobCategories, JobLocations } from '@/assets/assets';
 
 const JobListing = () => {
-
-  const { isSearched, searchFilter, setSearchFilter } =
-    useContext(AppContext);
+  const { isSearched, searchFilter, setSearchFilter } = useContext(AppContext);
 
   const [showFilter, setShowFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,9 +18,11 @@ const JobListing = () => {
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState(jobs);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchJobs = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(`${API_BASE_URL}/jobs/all?page=${currentPage}&limit=${jobsPerPage}`);
         if (!response.ok) {
@@ -34,6 +34,8 @@ const JobListing = () => {
         setJobs([]);
         setFilteredJobs([]);
         toast.error(error.message || 'Error fetching jobs. Try again later.');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -41,28 +43,38 @@ const JobListing = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    const matchesCategory = job => selectedCategories.length === 0 || selectedCategories.includes(job.category)
+    const matchesCategory = (job) =>
+      selectedCategories.length === 0 || selectedCategories.includes(job.category);
 
-    const matchesLocation = job => selectedLocations.length === 0 || selectedLocations.includes(job.location)
+    const matchesLocation = (job) =>
+      selectedLocations.length === 0 || selectedLocations.includes(job.location);
 
-    const matchesTitle = job => searchFilter.title === "" || job.title.toLowerCase().includes(searchFilter.title.toLowerCase())
+    const matchesTitle = (job) =>
+      searchFilter.title === '' || job.title.toLowerCase().includes(searchFilter.title.toLowerCase());
 
-    const matchesSearchLocation = job => searchFilter.location === "" || job.location.toLowerCase().includes(searchFilter.location.toLowerCase())
+    const matchesSearchLocation = (job) =>
+      searchFilter.location === '' || job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
 
-    // using reverse because I want the latest jobs at the top of the search results
-    const newFilteredJobs = jobs.slice().reverse().filter(
-      job => matchesCategory(job) && matchesLocation(job) && matchesTitle(job) && matchesSearchLocation(job)
-    )
+    const newFilteredJobs = jobs
+      .slice()
+      .reverse()
+      .filter(
+        (job) =>
+          matchesCategory(job) &&
+          matchesLocation(job) &&
+          matchesTitle(job) &&
+          matchesSearchLocation(job)
+      );
 
-    setFilteredJobs(newFilteredJobs)
-    setCurrentPage(1)
-  }, [jobs, selectedCategories, selectedLocations, searchFilter])
+    setFilteredJobs(newFilteredJobs);
+    setCurrentPage(1);
+  }, [jobs, selectedCategories, selectedLocations, searchFilter]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category],
+        : [...prev, category]
     );
   };
 
@@ -70,7 +82,7 @@ const JobListing = () => {
     setSelectedLocations((prev) =>
       prev.includes(location)
         ? prev.filter((c) => c !== location)
-        : [...prev, location],
+        : [...prev, location]
     );
   };
 
@@ -165,15 +177,17 @@ const JobListing = () => {
         </h3>
         <p className="mb-8">Get your desired job from top companies</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filteredJobs
-            .slice((currentPage - 1) * jobsPerPage, currentPage * jobsPerPage)
-            .map((job, i) => (
-              <JobCard key={i} job={job} />
-            ))}
+          {isLoading
+            ? Array.from({ length: jobsPerPage }).map((_, i) => (
+              <JobCard key={i} isLoading={true} />
+            ))
+            : filteredJobs
+              .slice((currentPage - 1) * jobsPerPage, currentPage * jobsPerPage)
+              .map((job, i) => <JobCard key={i} job={job} />)}
         </div>
 
         {/* pagination */}
-        {filteredJobs.length > 0 && (
+        {filteredJobs.length > 0 && !isLoading && (
           <div className="flex items-center justify-center space-x-2 mt-10">
             <a
               href="#job-list"
@@ -191,7 +205,7 @@ const JobListing = () => {
                     {i + 1}
                   </button>
                 </a>
-              ),
+              )
             )}
             <a
               href="#job-list"
@@ -199,8 +213,8 @@ const JobListing = () => {
                 setCurrentPage(
                   Math.min(
                     currentPage + 1,
-                    Math.ceil(filteredJobs.length / jobsPerPage),
-                  ),
+                    Math.ceil(filteredJobs.length / jobsPerPage)
+                  )
                 )
               }
             >
