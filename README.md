@@ -1,4 +1,4 @@
-# 9jajobplug
+# jobplug9ja
 
 This repository contains a full-stack job portal application with a Node.js API and a React client. Below are the setup instructions for both the API and client.
 
