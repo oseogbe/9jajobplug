@@ -66,15 +66,16 @@ model Business {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  recruiterId String @db.ObjectId
-  recruiter   User   @relation(fields: [recruiterId], references: [id])
+  recruiterId String        @db.ObjectId
+  recruiter   User          @relation(fields: [recruiterId], references: [id])
   jobs        Job[]
+  Application Application[]
 }
 
 model Job {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  slug        String   @unique
+  slug        String    @unique
   description String
   category    String
   location    String
@@ -83,8 +84,10 @@ model Job {
   type        JobType
   workMode    String // e.g., Remote, On-site
   isPaid      Boolean // Whether the job is paid
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  status      JobStatus @default(pending)
+  deadline    DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   businessId  String        @db.ObjectId
   business    Business      @relation(fields: [businessId], references: [id])
@@ -101,6 +104,13 @@ enum JobType {
   volunteer
 }
 
+enum JobStatus {
+  open
+  closed
+  pending
+  rejected
+}
+
 model Resume {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   userId       String   @db.ObjectId
@@ -115,14 +125,16 @@ model Resume {
 }
 
 model Application {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  jobId     String   @db.ObjectId
-  job       Job      @relation(fields: [jobId], references: [id])
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  resumeId  String   @db.ObjectId
-  resume    Resume   @relation(fields: [resumeId], references: [id])
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  businessId String   @db.ObjectId
+  business   Business @relation(fields: [businessId], references: [id])
+  jobId      String   @db.ObjectId
+  job        Job      @relation(fields: [jobId], references: [id])
+  talentId   String   @db.ObjectId
+  talent     User     @relation(fields: [talentId], references: [id])
+  resumeId   String   @db.ObjectId
+  resume     Resume   @relation(fields: [resumeId], references: [id])
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

@@ -19,6 +19,7 @@ import userRoutes from "@/routes/v1/userRoute"
 import businessRoutes from "@/routes/v1/businessRoute"
 import jobRoutes from "@/routes/v1/jobRoute"
 import talentRoutes from "@/routes/v1/talentRoute"
+import applicationRoutes from "@/routes/v1/applicationRoute"
 
 /**
  * root route
@@ -38,5 +39,6 @@ router.use('/users', userRoutes)
 router.use('/business', businessRoutes)
 router.use('/jobs', jobRoutes)
 router.use('/talents', talentRoutes)
+router.use('/applications', applicationRoutes)
 
 export default router
