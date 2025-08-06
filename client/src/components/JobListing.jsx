@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ListFilter } from 'lucide-react';
+import { ListFilter, ChevronDown, ChevronUp } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import JobCard from './JobCard';
@@ -19,6 +19,10 @@ const JobListing = () => {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState(jobs);
   const [isLoading, setIsLoading] = useState(true);
+  const [expandedSections, setExpandedSections] = useState({
+    categories: true,
+    locations: false
+  });
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -135,8 +139,14 @@ const JobListing = () => {
 
         {/* category filter */}
         <div className={showFilter ? '' : 'max-lg:hidden'}>
-          <h4 className="font-medium text-lg py-4">Search by Categories</h4>
-          <ul className="space-y-4 text-gray-600">
+          <button 
+            onClick={() => setExpandedSections(prev => ({ ...prev, categories: !prev.categories }))}
+            className="w-full flex items-center font-medium text-lg py-4"
+          >
+            <span className='mr-3'>Search by Categories</span>
+            {expandedSections.categories ? <ChevronUp size={20} className='mt-1' /> : <ChevronDown size={20} className='mt-1' />}
+          </button>
+          <ul className={`space-y-4 text-gray-600 transition-all duration-300 ${expandedSections.categories ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
             {JobCategories.map((category, i) => (
               <li key={i} className="flex gap-3 items-center">
                 <input
@@ -153,8 +163,14 @@ const JobListing = () => {
 
         {/* location filter */}
         <div className={showFilter ? '' : 'max-lg:hidden'}>
-          <h4 className="font-medium text-lg py-4 pt-14">Search by Location</h4>
-          <ul className="space-y-4 text-gray-600">
+          <button 
+            onClick={() => setExpandedSections(prev => ({ ...prev, locations: !prev.locations }))}
+            className="w-full flex items-center font-medium text-lg py-4 pt-14"
+          >
+            <span className='mr-3'>Search by State</span>
+            {expandedSections.locations ? <ChevronUp size={20} className='mt-1' /> : <ChevronDown size={20} className='mt-1' />}
+          </button>
+          <ul className={`space-y-4 text-gray-600 transition-all duration-300 ${expandedSections.locations ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
             {JobLocations.map((location, i) => (
               <li key={i} className="flex gap-3 items-center">
                 <input
